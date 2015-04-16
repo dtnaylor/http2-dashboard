@@ -1,0 +1,23 @@
+---
+layout: base
+---
+<div class="container-fluid">
+  <div class="row">
+	
+	<!-- SIDEBAR -->
+	<div class="col-sm-3 col-md-2 sidebar">
+	  <ul class="nav nav-sidebar">
+		<li><a href="{{ site.baseurl }}/measurements/overview.html">Overview</a></li>
+		<li><a href="{{ site.baseurl }}/measurements/adoption.html">Adoption</a></li>
+		<li><a href="{{ site.baseurl }}/measurements/usage.html">Usage Trends</a></li>
+		<li><a href="{{ site.baseurl }}/measurements/performance.html">Performance</a></li>
+	  </ul>
+	</div>
+
+	<!-- CONTENT -->
+	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+  	  {{ content }}
+	</div>
+
+  </div>
+</div>
