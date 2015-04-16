@@ -3,4 +3,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{{ site.baseurl }}/js/bootstrap.min.js"></script>
+
+	<!-- Highlight active tab in navbar and sidebar -->
+	<script>
+		var url = window.location;
+		$('ul.nav a').filter(function() {
+			// If the button we're checking is Measurements, there are multiple
+			// pages that should set it to active (anything in measurements dir)
+			if (this.id == 'measurements-tab') {
+				return (url.href.indexOf('/measurements') >= 0);
+			}
+			return this.href == url;
+			}).parent().addClass('active');
+	</script>
 </footer>
