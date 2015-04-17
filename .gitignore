@@ -1,3 +1,5 @@
 _site/
 .sass-cache/
 scripts/sample
+www/data
+scripts/data

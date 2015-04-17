@@ -3,6 +3,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{{ site.baseurl }}/js/bootstrap.min.js"></script>
+	<!-- Highcharts -->
+	<script src="http://code.highcharts.com/highcharts.js"></script>
+	<!-- Allow visitors to export charts-->
+	<script src="http://code.highcharts.com/modules/exporting.js"></script>
 
 	<!-- Highlight active tab in navbar and sidebar -->
 	<script>
@@ -16,4 +20,12 @@
 			return this.href == url;
 			}).parent().addClass('active');
 	</script>
+
+	<!-- page-specific scripts, if any -->
+	{% if page.scripts %}
+		{% for script in page.scripts %}
+			<script src="{{ site.baseurl }}/{{ script }}"></script>
+		{% endfor %}
+	{% endif %}
+
 </footer>
