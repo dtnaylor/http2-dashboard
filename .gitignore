@@ -3,3 +3,4 @@ _site/
 scripts/sample
 www/data
 scripts/data
+*.pyc

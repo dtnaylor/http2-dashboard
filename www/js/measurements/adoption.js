@@ -23,6 +23,12 @@ $.getJSON('/data/support_by_date.json', function(data) {
 
 });
 
+$.getJSON('/data/support_by_country.json', function(data) {
+	plot_map('#actual-support-map',
+		'Actual Support by Country',
+		data);
+});
+
 
 
 function plot_time_series(container, title, data, series_keys, series_labels) {
@@ -77,6 +83,49 @@ function plot_time_series(container, title, data, series_keys, series_labels) {
 			},
 
 			series: series,
+		});
+	});
+
+}
+
+function plot_map(container, title, data) {
+	$(function () {
+		// Initiate the chart
+		$(container).highcharts('Map', {
+
+			title : {
+				text : title
+			},
+
+			mapNavigation: {
+				enabled: true,
+				buttonOptions: {
+					verticalAlign: 'bottom'
+				}
+			},
+
+			colorAxis: {
+				min: 1,
+				max: 1000,
+				type: 'logarithmic'
+			},
+
+			series : [{
+				data : data['values'],
+				mapData: Highcharts.maps['custom/world'],
+				joinBy: ['iso-a2', 'code'],
+				name: 'Population density',
+				borderColor: 'black',
+				borderWidth: 0.2,
+				states: {
+					hover: {
+						borderWidth: 1
+					}
+				},
+				tooltip: {
+					valueSuffix: ' domains'
+				}
+			}]
 		});
 	});
 

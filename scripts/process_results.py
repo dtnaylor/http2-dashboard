@@ -11,8 +11,10 @@ import logging
 import glob
 import datetime
 import json
+import pprint
 
 from collections import defaultdict
+from country_codes import country_to_code
 
 
 ##
@@ -111,7 +113,34 @@ def support_by_date(conf, out_file):
     with open(out_file, 'w') as f:
         json.dump(data, f)
 
+def support_by_country(conf, out_file):
 
+    # get most recent country support data
+    dates = glob.glob(conf['country_support_prefix'] + '*')
+    dates = map(lambda x: 
+        datetime.datetime.strptime(x.replace(conf['country_support_prefix'], ''), '%a_%b_%d_%Y')
+        , dates)
+    dates = sorted(dates, reverse=True)
+    most_recent = dates[0].strftime('%a_%b_%d_%Y')
+    data_file = conf['country_support_prefix'] + most_recent
+    print data_file
+
+    # read the file & match countries with codes
+    data = {}
+    data['data_date'] = dates[0].strftime('%a, %b %d, %Y')
+    data['values'] = []
+    with open(data_file, 'r') as f:
+        for line in f:
+            country, count = line.strip().split()
+            country = country.replace('-', ' ')
+            data['values'].append({
+                'name': country,
+                'code': country_to_code[country],  # TODO: catch value error
+                'value': int(count)
+            })
+
+    with open(out_file, 'w') as f:
+        json.dump(data, f)
 
 
 
@@ -125,8 +154,12 @@ def main():
         os.makedirs(args.outdir)
     
     # SUPPORT BY DATE
-    out_file = os.path.join(args.outdir, 'support_by_date.json')
-    support_by_date(conf, out_file)
+    #out_file = os.path.join(args.outdir, 'support_by_date.json')
+    #support_by_date(conf, out_file)
+
+    # SUPPORT BY COUNTRY
+    out_file = os.path.join(args.outdir, 'support_by_country.json')
+    support_by_country(conf, out_file)
         
 
 
