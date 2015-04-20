@@ -25,7 +25,7 @@ $.getJSON('/data/support_by_date.json', function(data) {
 
 $.getJSON('/data/support_by_country.json', function(data) {
 	plot_map('#actual-support-map',
-		'Actual Support by Country',
+		'Actual Support by Country (' + data['data_date'] + ')',
 		data);
 });
 
@@ -114,7 +114,7 @@ function plot_map(container, title, data) {
 				data : data['values'],
 				mapData: Highcharts.maps['custom/world'],
 				joinBy: ['iso-a2', 'code'],
-				name: 'Population density',
+				name: 'Actual HTTP 2.0 Support',
 				borderColor: 'black',
 				borderWidth: 0.2,
 				states: {
