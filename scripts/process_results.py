@@ -81,6 +81,17 @@ def read_time_series(filepath):
         logging.exception('Error reading time series: %s' % filepath)
         return None, None, None
 
+def dates_for_prefix(prefix, date_format='%a_%b_%d_%Y'):
+    dates = glob.glob(prefix + '*')
+    dates = map(lambda x: 
+        datetime.datetime.strptime(x.replace(prefix, ''), date_format)
+        , dates)
+    dates = sorted(dates, reverse=True)
+    return dates
+
+
+
+
 ##
 ## DATA PROCESSING FUNCTIONS
 ##
@@ -116,14 +127,9 @@ def support_by_date(conf, out_file):
 def support_by_country(conf, out_file):
 
     # get most recent country support data
-    dates = glob.glob(conf['country_support_prefix'] + '*')
-    dates = map(lambda x: 
-        datetime.datetime.strptime(x.replace(conf['country_support_prefix'], ''), '%a_%b_%d_%Y')
-        , dates)
-    dates = sorted(dates, reverse=True)
+    dates = dates_for_prefix(conf['country_support_prefix'])
     most_recent = dates[0].strftime('%a_%b_%d_%Y')
     data_file = conf['country_support_prefix'] + most_recent
-    print data_file
 
     # read the file & match countries with codes
     data = {}
@@ -142,6 +148,15 @@ def support_by_country(conf, out_file):
     with open(out_file, 'w') as f:
         json.dump(data, f)
 
+def active_workers(conf, out_file):
+    # get list of crawl dates we have monitoring information for
+    dates = dates_for_prefix(conf['active_workers_prefix'])
+
+    # date (string) -> "values"/... -> value
+    data = defaultdict(dict)
+    for date in dates:
+        
+
 
 
 ##
@@ -158,8 +173,12 @@ def main():
     #support_by_date(conf, out_file)
 
     # SUPPORT BY COUNTRY
-    out_file = os.path.join(args.outdir, 'support_by_country.json')
-    support_by_country(conf, out_file)
+    #out_file = os.path.join(args.outdir, 'support_by_country.json')
+    #support_by_country(conf, out_file)
+
+    # ACTIVE WORKERS
+    out_file = os.path.join(args.outdir, 'active_workers.json')
+    active_workers(conf, out_file)
         
 
 
