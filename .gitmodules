@@ -1,0 +1,3 @@
+[submodule "scripts/myplot"]
+	path = scripts/myplot
+	url = git@github.com:dtnaylor/myplot.git

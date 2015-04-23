@@ -15,12 +15,17 @@
 	<script>
 		var url = window.location;
 		$('ul.nav a').filter(function() {
-			// If the button we're checking is Measurements, there are multiple
-			// pages that should set it to active (anything in measurements dir)
+			// If the tab we're checking has sub-pages, there are multiple
+			// pages that should set it to active
 			if (this.id == 'measurements-tab') {
-				return (url.href.indexOf('/measurements') >= 0);
+				return (url.href.indexOf('/measurements/') >= 0);
 			}
+			else if (this.id == 'platform-tab') {
+				return (url.href.indexOf('/platform/') >= 0);
+			}
+			else {
 			return this.href == url;
+			}
 			}).parent().addClass('active');
 	</script>
 

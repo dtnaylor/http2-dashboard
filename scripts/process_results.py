@@ -12,9 +12,13 @@ import glob
 import datetime
 import json
 import pprint
+import operator
 
 from collections import defaultdict
 from country_codes import country_to_code
+
+#sys.path.append('./myplot')
+#import myplot
 
 
 ##
@@ -128,7 +132,7 @@ def support_by_country(conf, out_file):
 
     # get most recent country support data
     dates = dates_for_prefix(conf['country_support_prefix'])
-    most_recent = dates[0].strftime('%a_%b_%d_%Y')
+    most_recent = dates[0].strftime('%a_%b_%-d_%Y')  # dash for no leading 0 on day
     data_file = conf['country_support_prefix'] + most_recent
 
     # read the file & match countries with codes
@@ -152,9 +156,77 @@ def active_workers(conf, out_file):
     # get list of crawl dates we have monitoring information for
     dates = dates_for_prefix(conf['active_workers_prefix'])
 
-    # date (string) -> "values"/... -> value
-    data = defaultdict(dict)
+    # list of dicts:
+    #   'year' -> year
+    #   'month' -> month (for JS, so 0-11)
+    #   'day' -> day
+    #   'pretty_date' -> date as string
+    #   'counts' -> list of [time, count] pairs
+    data = []
     for date in dates:
+        # read time/count pairs from file
+        in_file = conf['active_workers_prefix'] + date.strftime('%a_%b_%-d_%Y')
+        time_count_pairs = []
+        with open(in_file, 'r') as f:
+            for line in f:
+                fields = line.strip().split()
+                time_count_pairs.append([int(fields[0])*1000,  # convert to milliseconds
+                    int(fields[1])])
+
+        # add data to dict
+        data.append({
+            'year': date.year,
+            'month': date.month-1,
+            'day': date.day,
+            'pretty_date': date.strftime('%a, %b %d, %Y'),
+            'counts': time_count_pairs,
+        })
+    
+    with open(out_file, 'w') as f:
+        json.dump(data, f)
+
+
+def task_completion(conf, out_file):
+    # get list of crawl dates we have monitoring information for
+    dates = dates_for_prefix(conf['task_completion_prefix'])
+
+    # list of dicts:
+    #   'year' -> year
+    #   'month' -> month (for JS, so 0-11)
+    #   'day' -> day
+    #   'pretty_date' -> date as string
+    #   'time_hist' -> list of (time, count) pairs
+    data = []
+    for date in dates:
+        # read completion times
+        in_file = conf['task_completion_prefix'] + date.strftime('%a_%b_%-d_%Y')
+        completion_times = []
+        with open(in_file, 'r') as f:
+            for line in f:
+                fields = line.strip().split()
+                completion_times.append(int(fields[0]))
+                
+        # make histogram
+        time_hist = defaultdict(int)
+        for time in completion_times:
+            time_hist[time] += 1
+        
+        # sort & format as a list for highcharts
+        sorted_time_hist = sorted(time_hist.items(), key=operator.itemgetter(0))
+
+        # TODO: CDF also?
+
+        # add data to dict
+        data.append({
+            'year': date.year,
+            'month': date.month-1,
+            'day': date.day,
+            'pretty_date': date.strftime('%a, %b %d, %Y'),
+            'times': sorted_time_hist,
+        })
+    
+    with open(out_file, 'w') as f:
+        json.dump(data, f)
         
 
 
@@ -177,8 +249,12 @@ def main():
     #support_by_country(conf, out_file)
 
     # ACTIVE WORKERS
-    out_file = os.path.join(args.outdir, 'active_workers.json')
-    active_workers(conf, out_file)
+    #out_file = os.path.join(args.outdir, 'active_workers.json')
+    #active_workers(conf, out_file)
+    
+    # TASK COMPLETION
+    out_file = os.path.join(args.outdir, 'task_completion.json')
+    task_completion(conf, out_file)
         
 
 
