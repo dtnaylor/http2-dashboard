@@ -1,4 +1,6 @@
-$.getJSON('/data/support_by_date.json', function(data) {
+---
+---
+$.getJSON('{{ site.baseurl }}/data/support_by_date.json', function(data) {
 	plot_time_series('#advertised-vs-actual-chart',
 		'Announced Support vs. Actual Support',
 		data,
@@ -23,7 +25,7 @@ $.getJSON('/data/support_by_date.json', function(data) {
 
 });
 
-$.getJSON('/data/support_by_country.json', function(data) {
+$.getJSON('{{ site.baseurl }}/data/support_by_country.json', function(data) {
 	plot_map('#actual-support-map',
 		'Actual Support by Country (' + data['data_date'] + ')',
 		data);

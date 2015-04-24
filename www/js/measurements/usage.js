@@ -1,9 +1,11 @@
+---
+---
 var proto_labels = new Array();
 proto_labels["h1"] = "HTTP 1";
 proto_labels["h2"] = "HTTP 2";
 proto_labels["spdy"] = "SPDY";
 
-$.getJSON('/data/usage.json', function(data) {
+$.getJSON('{{ site.baseurl }}/data/usage.json', function(data) {
 
 	plot_cdf('#num-obj-cdf',
 		'Number of Objects',

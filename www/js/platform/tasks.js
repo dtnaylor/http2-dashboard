@@ -1,4 +1,6 @@
-$.getJSON('/data/task_completion.json', function(data) {
+---
+---
+$.getJSON('{{ site.baseurl }}/data/task_completion.json', function(data) {
 	// for now, just show most recent crawl
 	var crawl_data = data[0];
 
