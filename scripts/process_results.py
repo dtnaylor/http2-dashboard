@@ -8,6 +8,7 @@ import os
 import sys
 import argparse
 import logging
+import re
 import glob
 import datetime
 import json
@@ -17,8 +18,8 @@ import operator
 from collections import defaultdict
 from country_codes import country_to_code
 
-#sys.path.append('./myplot')
-#import myplot
+sys.path.append('./myplot')
+import myplot
 
 
 ##
@@ -92,6 +93,17 @@ def dates_for_prefix(prefix, date_format='%a_%b_%d_%Y'):
         , dates)
     dates = sorted(dates, reverse=True)
     return dates
+
+def histogram(values):
+    hist = defaultdict(int)
+    for value in values:
+        hist[value] += 1
+    
+    return sorted(hist.items(), key=operator.itemgetter(0))
+
+def cdf(values):
+    counts, x_vals = myplot.cdf_vals_from_data(values)
+    return zip(x_vals, counts)
 
 
 
@@ -205,14 +217,6 @@ def task_completion(conf, out_file):
             for line in f:
                 fields = line.strip().split()
                 completion_times.append(int(fields[0]))
-                
-        # make histogram
-        time_hist = defaultdict(int)
-        for time in completion_times:
-            time_hist[time] += 1
-        
-        # sort & format as a list for highcharts
-        sorted_time_hist = sorted(time_hist.items(), key=operator.itemgetter(0))
 
         # TODO: CDF also?
 
@@ -222,11 +226,91 @@ def task_completion(conf, out_file):
             'month': date.month-1,
             'day': date.day,
             'pretty_date': date.strftime('%a, %b %d, %Y'),
-            'times': sorted_time_hist,
+            'times': histogram(completion_times),
         })
     
     with open(out_file, 'w') as f:
         json.dump(data, f)
+
+def usage_and_performance(conf, out_file):
+
+    # initially store data in temp_data dict:
+    # date -> proto -> dict:
+    #   'num_objects' -> list of values
+    #   'num_connections' -> list of values
+    #   'num_domains' -> list of values
+    #   'plt' -> list of values
+    #
+    # then transform to list of dicts:
+    #   'pretty_date' -> date as string
+    #   'protocols' -> list of protocols
+    #   'protocol_data' -> dict of dicts: 
+    #      'num_objects_hist' -> list of (value, count) pairs
+    #      'num_objects_cdf' -> list of (x, y) pairs
+    #      'num_connections_hist' -> list of (value, count) pairs
+    #      'num_connections_cdf' -> list of (x, y) pairs
+    #      'num_domains_hist' -> list of (value, count) pairs
+    #      'num_domains_cdf' -> list of (x, y) pairs
+    #      'plt_hist' -> list of (value, count) pairs
+    #      'plt_cdf' -> list of (x, y) pairs
+
+
+    # read data and store in temp dict
+    temp_data = defaultdict(dict)
+    for fname in glob.glob(conf['usage_dir'] + '/*'):
+        m = re.match(r'([^_]*)_((Sun|Mon|Tue|Wed|Thu|Fri|Sat)_(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)_[0-9][0-9]?_[0-9]{4})', os.path.basename(fname))
+        if m:
+            protocol = m.group(1)
+            date_str = m.group(2)
+            date = datetime.datetime.strptime(date_str, '%a_%b_%d_%Y')
+
+            objects = []
+            conns = []
+            domains = []
+            plts = []
+            with open(fname, 'r') as f:
+                for line in f:
+                    fields = line.strip().split()
+                    objects.append(float(fields[0]))
+                    conns.append(float(fields[1]))
+                    domains.append(float(fields[2]))
+                    plts.append(float(fields[3]))
+
+            temp_data[date][protocol] = {
+                'num_objects': objects,
+                'num_connections': conns,
+                'num_domains': domains,
+                'plt': plts,
+            }
+
+    # convert to output format (for hists and CDFs)
+    data = []
+    for date in sorted(temp_data.keys(), reverse=True):
+        proto_data = {}
+        for proto in temp_data[date]:
+            proto_data[proto] = {
+                'num_objects_hist': histogram(temp_data[date][proto]['num_objects']),
+                'num_objects_cdf': cdf(temp_data[date][proto]['num_objects']),
+                'num_connections_hist': histogram(temp_data[date][proto]['num_connections']),
+                'num_connections_cdf': cdf(temp_data[date][proto]['num_connections']),
+                'num_domains_hist': histogram(temp_data[date][proto]['num_domains']),
+                'num_domains_cdf': cdf(temp_data[date][proto]['num_domains']),
+                'plt_hist': histogram(temp_data[date][proto]['plt']),
+                'plt_cdf': cdf(temp_data[date][proto]['plt']),
+            }
+            
+        data.append({
+            'pretty_date': date.strftime('%a, %b %d, %Y'),
+            'protocols': temp_data[date].keys(),
+            'protocol_data': proto_data
+        })
+
+    with open(out_file, 'w') as f:
+        json.dump(data, f)
+
+
+
+    
         
 
 
@@ -253,8 +337,12 @@ def main():
     #active_workers(conf, out_file)
     
     # TASK COMPLETION
-    out_file = os.path.join(args.outdir, 'task_completion.json')
-    task_completion(conf, out_file)
+    #out_file = os.path.join(args.outdir, 'task_completion.json')
+    #task_completion(conf, out_file)
+    
+    # USAGE AND PERFORMANCE
+    out_file = os.path.join(args.outdir, 'usage.json')
+    usage_and_performance(conf, out_file)
         
 
 

@@ -4,3 +4,4 @@ scripts/sample
 www/data
 scripts/data
 *.pyc
+*.swp

@@ -1,0 +1,173 @@
+---
+layout: default
+---
+
+<!-- ABOUT TEXT -->
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+
+		<div class="page-header">
+		  <h1>About HTTP 2.0 Dashbaord</h1>
+		</div>
+		
+		<p>Summary...</p>
+
+	</div> <!-- col -->
+</div> <!-- row -->
+
+
+<!-- FAQs -->
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+
+		<h2>FAQs</h2>
+
+		NOTE: These are placeholder FAQs from my HTTPS dashboard site.
+
+		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+		  <div class="panel panel-default">
+			<div class="panel-heading" role="tab" id="headingOne">
+			  <h4 class="panel-title">
+				<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+				  Which URLs do you crawl?
+				</a>
+			  </h4>
+			</div>
+			<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+			  <div class="panel-body">
+				Before each crawl, we download the most recent version of the
+				global <a href="http://www.alexa.com/topsites">Alexa Top 500
+				Sites</a>. In the future, we hope to expand this list.
+			  </div>
+			</div>
+		  </div>
+
+		  <div class="panel panel-default">
+			<div class="panel-heading" role="tab" id="headingTwo">
+			  <h4 class="panel-title">
+				<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+				  When and where do you perform crawls?
+				</a>
+			  </h4>
+			</div>
+			<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+			  <div class="panel-body">
+				Our nightly crawls are performed from <a
+				href="http://www.cmu.edu">Carnegie Mellon University</a> in
+				Pittsburgh, PA, USA. In the future, we hope to crawl from
+				multiple locations.
+			  </div>
+			</div>
+		  </div>
+
+		  <div class="panel panel-default">
+			<div class="panel-heading" role="tab" id="headingThree">
+			  <h4 class="panel-title">
+				<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+				  What software do you use?
+				</a>
+			  </h4>
+			</div>
+			<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+			  <div class="panel-body">
+				<p>We capture a HAR for each page using Google Chrome and <a
+				href="https://github.com/cyrus-and/chrome-har-capturer">Chrome
+				HAR Capturer</a>. We generate screenshots using <a
+				href="http://phantomjs.org/screen-capture.html">PhantomJS</a>.</p>
+
+				Our Web profiling code is available on <a
+				href="https://github.com/dtnaylor/web-profiler">Github</a>.
+			  </div>
+			</div>
+		  </div>
+		  
+		  <div class="panel panel-default">
+			<div class="panel-heading" role="tab" id="headingFour">
+			  <h4 class="panel-title">
+				<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+				  Can I see a side-by-side comparison of a site's mobile and desktop versions?
+				</a>
+			  </h4>
+			</div>
+			<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+			  <div class="panel-body">
+				Sorry, not right now.
+			  </div>
+			</div>
+		  </div>
+		  
+		  <div class="panel panel-default">
+			<div class="panel-heading" role="tab" id="headingFive">
+			  <h4 class="panel-title">
+				<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+				  Can I see how a site's structure has evolved over time?
+				</a>
+			  </h4>
+			</div>
+			<div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+			  <div class="panel-body">
+				Not right now, but we're working on it.
+			  </div>
+			</div>
+		  </div>
+		  
+		  <div class="panel panel-default">
+			<div class="panel-heading" role="tab" id="headingSix">
+			  <h4 class="panel-title">
+				<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+				  It looks like the screenshot doesn't completely match the numbers in the profile. Am I crazy?
+				</a>
+			  </h4>
+			</div>
+			<div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+			  <div class="panel-body">
+				This is possible. Our profiles are based on HARs captured
+				by Chrome, but we haven't found a good way to render a page
+				to an image file from Chrome via the command line (if you
+				have suggestions, we're all ears!). So, for the time being,
+				we're making a second pass using PhantomJS to capture
+				screenshots. If Chrome and PhantomJS load a page
+				differently (e.g., sometimes Chrome refuses to load mixed
+				content), there may be discrepancies between the numbers in
+				the profile and the screenshot.
+			  </div>
+			</div>
+		  </div>
+		  
+		  <div class="panel panel-default">
+			<div class="panel-heading" role="tab" id="headingSeven">
+			  <h4 class="panel-title">
+				<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+				  Some of the screenshot links are broken. What gives?
+				</a>
+			  </h4>
+			</div>
+			<div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+			  <div class="panel-body">
+				Due to space constraints, we only save full-size
+				screenshots for the past week. Thumbnails are kept for all
+				crawls.
+			  </div>
+			</div>
+		  </div>
+
+		</div>  <!-- panel group -->
+
+	</div> <!-- col -->
+</div> <!-- row -->
+
+
+
+<!-- CONTACT -->
+<div class="row">
+	<div class="col-md-10 col-md-offset-1">
+
+		<h2>Contact</h2>
+		<p>Questions or comments? Contact 
+		<a href="mailto:matteo.varvello@telefonica.com?subject=H2 Measurement Platform
+			&amp;body=I am contacting you about your H2 measurement platform.">
+						Matteo Varvello</a>.</p>
+
+	</div> <!-- col -->
+</div> <!-- row -->
