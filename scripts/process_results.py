@@ -94,15 +94,20 @@ def dates_for_prefix(prefix, date_format='%a_%b_%d_%Y'):
     dates = sorted(dates, reverse=True)
     return dates
 
-def histogram(values):
+def histogram(values, round_values=False):
+    if round_values:
+        values=map(round, values)
+
     hist = defaultdict(int)
     for value in values:
         hist[value] += 1
     
     return sorted(hist.items(), key=operator.itemgetter(0))
 
-def cdf(values):
+def cdf(values, round_values=False):
     counts, x_vals = myplot.cdf_vals_from_data(values)
+    if round_values:
+        x_vals=map(round, x_vals)
     return zip(x_vals, counts)
 
 
@@ -289,14 +294,14 @@ def usage_and_performance(conf, out_file):
         proto_data = {}
         for proto in temp_data[date]:
             proto_data[proto] = {
-                'num_objects_hist': histogram(temp_data[date][proto]['num_objects']),
-                'num_objects_cdf': cdf(temp_data[date][proto]['num_objects']),
-                'num_connections_hist': histogram(temp_data[date][proto]['num_connections']),
-                'num_connections_cdf': cdf(temp_data[date][proto]['num_connections']),
-                'num_domains_hist': histogram(temp_data[date][proto]['num_domains']),
-                'num_domains_cdf': cdf(temp_data[date][proto]['num_domains']),
-                'plt_hist': histogram(temp_data[date][proto]['plt']),
-                'plt_cdf': cdf(temp_data[date][proto]['plt']),
+                'num_objects_hist': histogram(temp_data[date][proto]['num_objects'], round_values=True),
+                'num_objects_cdf': cdf(temp_data[date][proto]['num_objects'], round_values=True),
+                'num_connections_hist': histogram(temp_data[date][proto]['num_connections'], round_values=True),
+                'num_connections_cdf': cdf(temp_data[date][proto]['num_connections'], round_values=True),
+                'num_domains_hist': histogram(temp_data[date][proto]['num_domains'], round_values=True),
+                'num_domains_cdf': cdf(temp_data[date][proto]['num_domains'], round_values=True),
+                'plt_hist': histogram(temp_data[date][proto]['plt'], round_values=True),
+                'plt_cdf': cdf(temp_data[date][proto]['plt'], round_values=True),
             }
             
         data.append({

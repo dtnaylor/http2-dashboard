@@ -1,24 +1,32 @@
-function plot_cdf(container, title, data, series_keys, series_labels, data_key, verb, value_suffix) {
-	// Build highcharts series entries
+// Build highcharts series entries
+function build_series(series_keys, series_labels, data, data_key) {
 	series = [];
 	for (var i = 0; i < series_keys.length; i++) {
-		var key = series_keys[i];
+		var series_key = series_keys[i];
 		series.push({
-			type: 'line',
-			name: series_labels[key],
-			data: data['protocol_data'][key][data_key + '_cdf']
+			name: series_labels[series_key],
+			data: data[series_key][data_key]
 		});
 	}
 
+	return series;
+}
+
+
+function plot_cdf(container, data, title, xLabel, series_keys, series_labels, data_key, verb, value_suffix) {
 	$(function () {
 		$(container).highcharts({
 			chart: {
-				zoomType: 'x'
+				zoomType: 'x',
+				type: 'line',
 			},
 			title: {
 				text: title,
 			},
 			xAxis: {
+				title: {
+					text: xLabel,
+				}
 			},
 			yAxis: {
 				min: 0,
@@ -45,10 +53,53 @@ function plot_cdf(container, title, data, series_keys, series_labels, data_key, 
 					marker: {
 						enabled: false,
 					}
-				}
+				},
 			},
 
-			series: series,
+			series: build_series(series_keys, series_labels, data['protocol_data'], data_key+'_cdf'),
+		});
+	});
+
+}
+
+function plot_area_hist(container, data, title, xLabel, series_keys, series_labels, data_key, value_suffix) {
+	$(function () {
+		$(container).highcharts({
+			chart: {
+				zoomType: 'x',
+				type: 'area',
+			},
+			title: {
+				text: title,
+			},
+			xAxis: {
+				title: {
+					text: xLabel,
+				}
+			},
+			yAxis: {
+				min: 0,
+				title: {
+					text: 'Number of Sites',
+				}
+			},
+			tooltip: {
+				shared: true,
+				headerFormat: '<span style="font-size: 10px">{point.key} ' + value_suffix + '</span><br/>',
+				valueSuffix: ' sites',
+			},
+			legend: {
+				enabled: true,
+			},
+			plotOptions: {
+				area: {
+					marker: {
+						enabled: false,
+					}
+				},
+			},
+
+			series: build_series(series_keys, series_labels, data['protocol_data'], data_key+'_hist'),
 		});
 	});
 

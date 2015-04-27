@@ -7,6 +7,17 @@ body {
   padding-top: 50px;
 }
 
+/* Move anchors down so when you jump, header isn't hidden under navbar */
+.anchor {
+	padding-top: 50px; margin-top: -50px;
+}
+.anchor-wrapper:hover {
+	text-decoration: none;
+	color: inherit;
+}
+.anchor-wrapper {
+	color: inherit;
+}
 
 /*
  * Global add-ons

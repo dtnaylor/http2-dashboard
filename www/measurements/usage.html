@@ -4,8 +4,101 @@ title: Usage
 scripts: ['js/measurements/usage.js']
 ---
 
-<h1 class="page-header">Usage Trends</h1>
+<h1 class="page-header">Usage Trends
+<sup><a style="color:inherit;"data-toggle="modal" data-target="#page-differences-modal"><span class="glyphicon glyphicon-question-sign" style="font-size:16px"></span></a></sup>
+</h1>
 
-<div id="num-obj-cdf" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-<div id="num-conn-cdf" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-<div id="num-domain-cdf" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="row" style="margin-left: 10px; margin-bottom: 20px">
+	<div class="col-md-12">
+		<div align="center">
+			Jump:&nbsp;
+			<a href="#objects">Objects</a>&nbsp;&nbsp;&bull;&nbsp;
+			<a href="#connections">Connections</a>&nbsp;&nbsp;&bull;&nbsp;
+			<a href="#domains">Domains</a>
+		</div>
+	</div>
+</div> <!-- row -->
+
+
+<!-- NUM OBJECTS -->
+<div class="row" style="margin-left: 10px; margin-bottom: 40px">
+	<a name="objects" class="anchor-wrapper">
+		<h3 class="anchor">Number of Objects</h3>
+	</a>
+	<div class="col-md-6">
+		<div id="num-obj-hist" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</div> <!-- col -->
+	<div class="col-md-6">
+		<div id="num-obj-cdf" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</div> <!-- col -->
+</div> <!-- row -->
+
+<!-- NUM CONNECTIONS -->
+<div class="row" style="margin-left: 10px; margin-bottom: 40px">
+	<a name="connections" class="anchor-wrapper">
+		<h3 class="anchor">Number of Connections</h3>
+	</a>
+	<div class="col-md-6">
+		<div id="num-conn-hist" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</div> <!-- col -->
+	<div class="col-md-6">
+		<div id="num-conn-cdf" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</div> <!-- col -->
+</div> <!-- row -->
+
+<!-- NUM DOMAINS -->
+<div class="row" style="margin-left: 10px; margin-bottom: 40px">
+	<a name="domains" class="anchor-wrapper">
+		<h3 class="anchor">Number of Domains</h3>
+	</a>
+	<div class="col-md-6">
+		<div id="num-domain-hist" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</div> <!-- col -->
+	<div class="col-md-6">
+		<div id="num-domain-cdf" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</div> <!-- col -->
+</div> <!-- row -->
+	
+
+
+<!-- =============== BEGIN EXPLANATION MODALS =============== -->
+
+<!-- PAGE DIFFERENCES -->
+<div class="modal fade" id="page-differences-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		<h4 class="modal-title" id="myModalLabel">Page Differences</h4>
+	  </div>
+	  <div class="modal-body">
+		<p>Web pages are made up of multiple objects. This first object fetched is
+		an HTML document, which tells your browser which additional objects it
+		should load and how to display them. Additional objects could include
+		scripts, style sheets, and images.</p>
+
+		<p style="text-align: center;"><img src="{{ site.baseurl }}/img/objects@2x.png" width="204px"/></p>
+
+		<p>For complex pages, these objects are often served from different
+		servers. For example, a site might host all of its HTML and JavaScript
+		on one server and its images on another. Sometimes, sites serve pages
+		differently over HTTP 1 and HTTP 2:</p>
+		
+		<p style="text-align: center;"><img src="{{ site.baseurl }}/img/object-differences.png" style="width: 100%; max-width: 996px;"/></p>
+
+		<p>These results compare the HTTP 1 and HTTP 2 versions of the sites we
+		crawled in terms of:
+		<ul>
+			<li><strong>Number of Objects:</strong> How many objects did each version of the page load?</li>
+			<li><strong>Number of TCP Connections:</strong> How many connections did our browser make when it loaded each version of the page?</li>
+			<li><strong>Number of Domains:</strong> How many servers did our browser contact when it loaded each version of the page?</li>
+		</ul>
+		</p>
+	  </div>
+	</div>
+  </div>
+</div>
+
+<!-- =============== END EXPLANATION MODALS =============== -->
