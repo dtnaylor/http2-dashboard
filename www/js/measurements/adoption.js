@@ -8,7 +8,7 @@ $.getJSON('{{ site.baseurl }}/data/support_by_date.json', function(data) {
 		['Announced Support', 'Actual Support']);
 	
 	plot_time_series('#draft-versions-chart',
-		'Version Comparison',
+		'Announced Support by Version',
 		data,
 		[
 		'spdy_2',

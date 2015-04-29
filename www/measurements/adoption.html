@@ -6,6 +6,103 @@ scripts: ['js/measurements/adoption.js']
 
 <h1 class="page-header">HTTP 2.0 Adoption</h1>
 
-<div id="advertised-vs-actual-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-<div id="draft-versions-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-<div id="actual-support-map" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="row" style="margin-left: 10px; margin-bottom: 20px">
+	<div class="col-md-12">
+		<div align="center">
+			Jump:&nbsp;
+			<a href="#time">Support by Time</a>&nbsp;&nbsp;&bull;&nbsp;
+			<a href="#country">Support by Country</a>&nbsp;&nbsp;&bull;&nbsp;
+			<a href="#organization">Support by Organization</a>
+		</div>
+	</div>
+</div> <!-- row -->
+
+
+
+<!-- BY TIME -->
+<div class="row" style="margin-left: 10px; margin-bottom: 40px">
+	<a name="time" class="anchor-wrapper">
+		<h3 class="anchor">Support Over Time</h3>
+	</a>
+
+	<div class="col-md-12">
+		<div id="draft-versions-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</div> <!-- col -->
+</div> <!-- row -->
+<div class="row" style="margin-left: 10px; margin-bottom: 20px">
+	<div class="col-md-12">
+		<a style="color:inherit;"data-toggle="modal" data-target="#announced-support-modal"><span class="glyphicon glyphicon-question-sign pull-right" style="font-size:20px"></span></a>
+
+		<div id="advertised-vs-actual-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</div> <!-- col -->
+</div> <!-- row -->
+
+
+
+<!-- BY COUNTRY -->
+<div class="row" style="margin-left: 10px; margin-bottom: 40px">
+	<a name="country" class="anchor-wrapper">
+		<h3 class="anchor">Support by Country</h3>
+	</a>
+	<div class="col-md-12">
+		<div id="actual-support-map" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</div> <!-- col -->
+</div> <!-- row -->
+
+
+
+<!-- BY ORGANIZATION -->
+<div class="row" style="margin-left: 10px; margin-bottom: 40px">
+	<a name="organization" class="anchor-wrapper">
+		<h3 class="anchor">Support by Organization</h3>
+	</a>
+	<div class="col-md-12">
+	</div> <!-- col -->
+</div> <!-- row -->
+
+
+
+
+
+
+<!-- =============== BEGIN EXPLANATION MODALS =============== -->
+
+<!-- ANNOUNCED VS ACTUAL SUPPORT -->
+<div class="modal fade" id="announced-support-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		<h4 class="modal-title" id="myModalLabel">Announced Support and Actual Support</h4>
+	  </div>
+	  <div class="modal-body">
+		<p>Web pages are made up of multiple objects. This first object fetched is
+		an HTML document, which tells your browser which additional objects it
+		should load and how to display them. Additional objects could include
+		scripts, style sheets, and images.</p>
+
+		<p style="text-align: center;"><img src="{{ site.baseurl }}/img/objects@2x.png" width="204px"/></p>
+
+		<p>For complex pages, these objects are often served from different
+		servers. For example, a site might host all of its HTML and JavaScript
+		on one server and its images on another. Sometimes, sites serve pages
+		differently over HTTP 1 and HTTP 2:</p>
+		
+		<p style="text-align: center;"><img src="{{ site.baseurl }}/img/object-differences.png" style="width: 100%; max-width: 996px;"/></p>
+
+		<p>These results compare the HTTP 1 and HTTP 2 versions of the sites we
+		crawled in terms of:
+		<ul>
+			<li><strong>Number of Objects:</strong> How many objects did each version of the page load?</li>
+			<li><strong>Number of TCP Connections:</strong> How many connections did our browser make when it loaded each version of the page?</li>
+			<li><strong>Number of Domains:</strong> How many servers did our browser contact when it loaded each version of the page?</li>
+		</ul>
+		</p>
+	  </div>
+	</div>
+  </div>
+</div>
+
+<!-- =============== END EXPLANATION MODALS =============== -->
