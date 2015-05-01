@@ -27,9 +27,21 @@ $.getJSON('{{ site.baseurl }}/data/support_by_date.json', function(data) {
 
 $.getJSON('{{ site.baseurl }}/data/support_by_country.json', function(data) {
 	plot_map('#actual-support-map',
-		'Actual Support by Country (' + data['data_date'] + ')',
+		'Actual Support by Country (' + data['pretty_date'] + ')',
 		data);
 });
+
+$.getJSON('{{ site.baseurl }}/data/support_by_organization.json', function(data) {
+	$('#org-table').DataTable( {
+		data: data['values'],
+		order: [[ 1, 'desc' ]],  // initially sort by count
+		columns: [
+			{ data: 'name' },
+			{ data: 'value' }
+		]
+	} );
+});
+
 
 
 

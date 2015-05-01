@@ -154,7 +154,7 @@ def support_by_country(conf, out_file):
 
     # read the file & match countries with codes
     data = {}
-    data['data_date'] = dates[0].strftime('%a, %b %d, %Y')
+    data['pretty_date'] = dates[0].strftime('%a, %b %d, %Y')
     data['values'] = []
     with open(data_file, 'r') as f:
         for line in f:
@@ -163,6 +163,29 @@ def support_by_country(conf, out_file):
             data['values'].append({
                 'name': country,
                 'code': country_to_code[country],  # TODO: catch value error
+                'value': int(count)
+            })
+
+    with open(out_file, 'w') as f:
+        json.dump(data, f)
+
+def support_by_organization(conf, out_file):
+
+    # get most recent country support data
+    dates = dates_for_prefix(conf['country_support_prefix'])
+    most_recent = dates[0].strftime('%a_%b_%-d_%Y')  # dash for no leading 0 on day
+    data_file = conf['organization_support_prefix'] + most_recent
+
+    # read the file & match countries with codes
+    data = {}
+    data['pretty_date'] = dates[0].strftime('%a, %b %d, %Y')
+    data['values'] = []
+    with open(data_file, 'r') as f:
+        for line in f:
+            org, count = line.strip().split()
+            org = org.replace('-', ' ')
+            data['values'].append({
+                'name': org,
                 'value': int(count)
             })
 
@@ -336,6 +359,10 @@ def main():
     # SUPPORT BY COUNTRY
     #out_file = os.path.join(args.outdir, 'support_by_country.json')
     #support_by_country(conf, out_file)
+    
+    # SUPPORT BY ORGANIZATION
+    out_file = os.path.join(args.outdir, 'support_by_organization.json')
+    support_by_organization(conf, out_file)
 
     # ACTIVE WORKERS
     #out_file = os.path.join(args.outdir, 'active_workers.json')
@@ -346,8 +373,8 @@ def main():
     #task_completion(conf, out_file)
     
     # USAGE AND PERFORMANCE
-    out_file = os.path.join(args.outdir, 'usage.json')
-    usage_and_performance(conf, out_file)
+    #out_file = os.path.join(args.outdir, 'usage.json')
+    #usage_and_performance(conf, out_file)
         
 
 

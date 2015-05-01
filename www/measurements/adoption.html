@@ -1,7 +1,7 @@
 ---
 layout: measurement
 title: Adoption
-scripts: ['js/measurements/adoption.js']
+scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/measurements/adoption.js']
 ---
 
 <h1 class="page-header">HTTP 2.0 Adoption</h1>
@@ -24,7 +24,9 @@ scripts: ['js/measurements/adoption.js']
 <!-- BY TIME -->
 <div class="row" style="margin-left: 10px; margin-bottom: 40px">
 	<a name="time" class="anchor-wrapper">
-		<h3 class="anchor">Support Over Time</h3>
+		<h3 class="anchor">Support Over Time
+		<span class="pull-right" style="color:inherit;"data-toggle="modal" data-target="#announced-support-modal"><span class="glyphicon glyphicon-question-sign pull-right" style="font-size:20px"></span></span>
+		</h3>
 	</a>
 
 	<div class="col-md-12">
@@ -33,7 +35,6 @@ scripts: ['js/measurements/adoption.js']
 </div> <!-- row -->
 <div class="row" style="margin-left: 10px; margin-bottom: 20px">
 	<div class="col-md-12">
-		<a style="color:inherit;"data-toggle="modal" data-target="#announced-support-modal"><span class="glyphicon glyphicon-question-sign pull-right" style="font-size:20px"></span></a>
 
 		<div id="advertised-vs-actual-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	</div> <!-- col -->
@@ -58,7 +59,20 @@ scripts: ['js/measurements/adoption.js']
 	<a name="organization" class="anchor-wrapper">
 		<h3 class="anchor">Support by Organization</h3>
 	</a>
-	<div class="col-md-12">
+	<div class="col-md-8 col-md-offset-2">
+
+		<table id="org-table" class="table table-hover">
+		  <col width="80%">
+		  <col width="20%">
+		  <thead>
+		  <tr>
+			<th>Organization</th>
+			<th># Domains</th>
+		  </tr>
+		  </thead>
+
+		</table>
+
 	</div> <!-- col -->
 </div> <!-- row -->
 
@@ -78,28 +92,25 @@ scripts: ['js/measurements/adoption.js']
 		<h4 class="modal-title" id="myModalLabel">Announced Support and Actual Support</h4>
 	  </div>
 	  <div class="modal-body">
-		<p>Web pages are made up of multiple objects. This first object fetched is
-		an HTML document, which tells your browser which additional objects it
-		should load and how to display them. Additional objects could include
-		scripts, style sheets, and images.</p>
+		<p>Until recently, web servers only worried about two flavors of HTTP:
+		HTTP and HTTPS. Upon receiving a new connection, servers differentiated
+		between the two using the TCP port number (80 for HTTP and 443 for
+		HTTPS).</p>
 
-		<p style="text-align: center;"><img src="{{ site.baseurl }}/img/objects@2x.png" width="204px"/></p>
-
-		<p>For complex pages, these objects are often served from different
-		servers. For example, a site might host all of its HTML and JavaScript
-		on one server and its images on another. Sometimes, sites serve pages
-		differently over HTTP 1 and HTTP 2:</p>
+		<p>Now, browsers may contact web servers using two additional
+		protocols: SPDY and HTTP/2. Rather than assigning them new port
+		numbers, they are both served on port 443 (along with HTTPS 1.1).  This
+		means servers need a new way of determining which application protocol
+		to speak on a new connection. The solution is a TLS extension called
+		<b>Next Protocol Negotiation (NPN)</b> and its successor,
+		<b>Application-Layer Protocol Negotiation (ALPN)</b>. NPN/ALPN allows
+		application endpoints to negotiate which protocol to use over TLS.</p>
 		
-		<p style="text-align: center;"><img src="{{ site.baseurl }}/img/object-differences.png" style="width: 100%; max-width: 996px;"/></p>
-
-		<p>These results compare the HTTP 1 and HTTP 2 versions of the sites we
-		crawled in terms of:
-		<ul>
-			<li><strong>Number of Objects:</strong> How many objects did each version of the page load?</li>
-			<li><strong>Number of TCP Connections:</strong> How many connections did our browser make when it loaded each version of the page?</li>
-			<li><strong>Number of Domains:</strong> How many servers did our browser contact when it loaded each version of the page?</li>
-		</ul>
-		</p>
+		<p>Servers use NPN/ALPN to announce which application protocols they
+		support; we call this <b>announced support</b>. In many cases, however,
+		if a client makes a request to a server announcing HTTP/2 support, the
+		server downgrades the connection to HTTP 1.1. If, on the other hand,
+		the server responds using HTTP/2, we call this <b>actual support</b>.</p>
 	  </div>
 	</div>
   </div>
