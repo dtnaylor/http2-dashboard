@@ -1,6 +1,32 @@
 ---
 layout: measurement
 title: Measurement Overview
+scripts: ['js/measurements/overview.js']
 ---
 
-<h1 class="page-header">Measurment Overview</h1>
+
+<div class="row" style="margin-top: 70px">
+	<!-- ANNOUNCED SUPPORT -->
+	<div class="col-md-5 col-md-offset-1">
+		<div class="jumbotron">
+		  <h2>Announced Support</h2>
+		  <p id="announced-text"></p>
+
+		  <div class="progress">
+		  	<div id="announced-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="1000000" style="width: 0%;"></div>
+		  </div>
+		</div>
+	</div> <!-- col -->
+	
+	<!-- ACTUAL SUPPORT -->
+	<div class="col-md-5">
+		<div class="jumbotron">
+		  <h2>Actual Support</h2>
+		  <p id="actual-text"></p>
+
+		  <div class="progress">
+		  	<div id="actual-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="1000000" style="width: .0624%;"></div>
+		  </div>
+		</div>
+	</div> <!-- col -->
+</div> <!-- row -->

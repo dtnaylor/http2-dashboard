@@ -139,6 +139,18 @@ def cdf(values, round_values=False):
 ##
 ## DATA PROCESSING FUNCTIONS
 ##
+def summary(conf, out_file):
+    announced_count = read_time_series(conf['advertised_support_by_date'])[0][-1]
+    actual_count = read_time_series(conf['actual_support_by_date'])[0][-1]
+
+    data = {
+        'announced_count': announced_count,
+        'actual_count': actual_count,
+    }
+    
+    with open(out_file, 'w') as f:
+        json.dump(data, f)
+
 def support_by_date(conf, out_file):
     series = ['advertised_support_by_date',
               'actual_support_by_date',
@@ -385,17 +397,21 @@ def main():
     if not os.path.exists(args.outdir):
         os.makedirs(args.outdir)
     
+    # SUMMARY
+    out_file = os.path.join(args.outdir, 'summary.json')
+    summary(conf, out_file)
+    
     # SUPPORT BY DATE
     #out_file = os.path.join(args.outdir, 'support_by_date.json')
     #support_by_date(conf, out_file)
 
     # SUPPORT BY COUNTRY
-    out_file = os.path.join(args.outdir, 'support_by_country.json')
-    support_by_country(conf, out_file)
+    #out_file = os.path.join(args.outdir, 'support_by_country.json')
+    #support_by_country(conf, out_file)
     
     # SUPPORT BY ORGANIZATION
-    out_file = os.path.join(args.outdir, 'support_by_organization.json')
-    support_by_organization(conf, out_file)
+    #out_file = os.path.join(args.outdir, 'support_by_organization.json')
+    #support_by_organization(conf, out_file)
 
     # ACTIVE WORKERS
     #out_file = os.path.join(args.outdir, 'active_workers.json')
