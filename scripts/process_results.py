@@ -94,6 +94,29 @@ def dates_for_prefix(prefix, date_format='%a_%b_%d_%Y'):
     dates = sorted(dates, reverse=True)
     return dates
 
+def dates_to_show(dates):
+    '''
+        Given a list of available crawl dates, return a subset that should
+        be displayed to the user.
+    '''
+
+    dates_to_display = []
+    
+    # take the most recent week
+    most_recent = dates[0]
+    for date in dates:
+        if (most_recent - date).days <= 7:
+            dates_to_display.append(date)
+        else:
+            break
+
+    # now take the first of every month as far back as we have
+    for date in dates[len(dates_to_display):]:
+        if date.day == 1:
+            dates_to_display.append(date)
+
+    return dates_to_display
+
 def histogram(values, round_values=False):
     if round_values:
         values=map(round, values)
@@ -149,22 +172,27 @@ def support_by_country(conf, out_file):
 
     # get most recent country support data
     dates = dates_for_prefix(conf['country_support_prefix'])
-    most_recent = dates[0].strftime('%a_%b_%-d_%Y')  # dash for no leading 0 on day
-    data_file = conf['country_support_prefix'] + most_recent
 
-    # read the file & match countries with codes
-    data = {}
-    data['pretty_date'] = dates[0].strftime('%a, %b %d, %Y')
-    data['values'] = []
-    with open(data_file, 'r') as f:
-        for line in f:
-            country, count = line.strip().split()
-            country = country.replace('-', ' ')
-            data['values'].append({
-                'name': country,
-                'code': country_to_code[country],  # TODO: catch value error
-                'value': int(count)
-            })
+    data = []
+    for date in dates_to_show(dates):
+        date_file_suffix = date.strftime('%a_%b_%-d_%Y')  # dash for no leading 0 on day
+        data_file = conf['country_support_prefix'] + date_file_suffix
+
+        values = []
+        with open(data_file, 'r') as f:
+            for line in f:
+                country, count = line.strip().split()
+                country = country.replace('-', ' ')
+                values.append({
+                    'name': country,
+                    'code': country_to_code[country],  # TODO: catch value error
+                    'value': int(count)
+                })
+
+        data.append({
+            'pretty_date': date.strftime('%a, %b %d, %Y'),
+            'values': values
+        })
 
     with open(out_file, 'w') as f:
         json.dump(data, f)
@@ -175,7 +203,7 @@ def support_by_organization(conf, out_file):
     dates = dates_for_prefix(conf['country_support_prefix'])
 
     data = []
-    for date in dates[:7]:  # TODO: first of each month all the way back?
+    for date in dates_to_show(dates):
         date_file_suffix = date.strftime('%a_%b_%-d_%Y')  # dash for no leading 0 on day
         data_file = conf['organization_support_prefix'] + date_file_suffix
 
@@ -362,8 +390,8 @@ def main():
     #support_by_date(conf, out_file)
 
     # SUPPORT BY COUNTRY
-    #out_file = os.path.join(args.outdir, 'support_by_country.json')
-    #support_by_country(conf, out_file)
+    out_file = os.path.join(args.outdir, 'support_by_country.json')
+    support_by_country(conf, out_file)
     
     # SUPPORT BY ORGANIZATION
     out_file = os.path.join(args.outdir, 'support_by_organization.json')

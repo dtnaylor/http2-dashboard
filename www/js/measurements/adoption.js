@@ -26,25 +26,50 @@ $.getJSON('{{ site.baseurl }}/data/support_by_date.json', function(data) {
 });
 
 $.getJSON('{{ site.baseurl }}/data/support_by_country.json', function(data) {
-	plot_map('#actual-support-map',
-		'Actual Support by Country (' + data['pretty_date'] + ')',
-		data);
+	fill_date_menu("country-date-menu", data, "set_country_crawl_date");
+	set_country_crawl_date(0);  // start with most recent data
 });
 
 $.getJSON('{{ site.baseurl }}/data/support_by_organization.json', function(data) {
+	fill_date_menu("org-date-menu", data, "set_org_crawl_date");
+	set_org_crawl_date(0);  // start with most recent data
+});
 
-	// Fill date menu
+
+/*
+ * Fill menu with available crawl dates.
+ * 	menu: the id of a ul element inside a bootstrap dropdown button
+ *	data: array whose entries are dictionaries, each containing a "pretty_date" element
+ *	change_callback: function to be called when user changes date;
+ *		input to the function is the index in data the user picked
+ */
+function fill_date_menu(menu, data, change_callback) {
 	for (i=0; i < data.length; i++) {
-		crawl_date_menu = document.getElementById("org-date-menu");
+		crawl_date_menu = document.getElementById(menu);
 		crawl_date_menu.innerHTML =
 			crawl_date_menu.innerHTML
-			+ '<li><a href="javascript: set_org_crawl_date(' + i + ');">' 
+			+ '<li><a href="javascript: ' + change_callback + '(' + i + ');">' 
 			+ data[i].pretty_date
 			+ '</a></li>';
 	}
+}
 
-	set_org_crawl_date(0);  // start with most recent data
-});
+
+
+// TODO: Save data in session storage?
+function set_country_crawl_date(index) {
+	$.getJSON('{{ site.baseurl }}/data/support_by_country.json', function(data) {
+
+		// set display date
+		display = document.getElementById("country-date-display");
+		display.innerHTML = data[index].pretty_date;
+
+		// load data into map
+		plot_map('#actual-support-map',
+			'Actual Support by Country',
+			data[index]);
+	});
+}
 
 
 // TODO: Save data in session storage?
