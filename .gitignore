@@ -5,3 +5,4 @@ www/data
 scripts/data
 *.pyc
 *.swp
+.DS_Store

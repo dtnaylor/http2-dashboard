@@ -84,11 +84,12 @@ scripts: ['js/measurements/usage.js']
 		<p>For complex pages, these objects are often served from different
 		servers. For example, a site might host all of its HTML and JavaScript
 		on one server and its images on another. Sometimes, sites serve pages
-		differently over HTTP 1 and HTTP 2:</p>
+		differently over HTTP and HTTP/2 (e.g., serving CSS in a separate file
+		in HTTP/2 that was previously inlined directly in the HTML):</p>
 		
-		<p style="text-align: center;"><img src="{{ site.baseurl }}/img/object-differences.png" style="width: 100%; max-width: 996px;"/></p>
+		<p style="text-align: center;"><img src="{{ site.baseurl }}/img/object-differences@2x.png" style="width: 100%; max-width: 568px;"/></p>
 
-		<p>These results compare the HTTP 1 and HTTP 2 versions of the sites we
+		<p>These results compare the HTTP and HTTP/2 versions of the sites we
 		crawled in terms of:
 		<ul>
 			<li><strong>Number of Objects:</strong> How many objects did each version of the page load?</li>
