@@ -1,3 +1,50 @@
+/* ========================= STORAGE ======================== */
+/*
+ * Wrapper for localStorage
+ */
+var LocalStorage = {
+	set: function(key, value) {
+		key = 'edu.cmu.cs.http2dashboard.' + key;
+		localStorage[key] = JSON.stringify(value);
+	},
+
+	get: function(key) {
+		key = 'edu.cmu.cs.http2dashboard.' + key;
+		return localStorage[key] ? JSON.parse(localStorage[key]) : null;
+	},
+
+	exists: function(key) {
+		key = 'edu.cmu.cs.http2dashboard.' + key;
+		return localStorage[key] != null;
+	},
+};
+
+/*
+ * Wrapper for sessionStorage
+ */
+var SessionStorage = {
+	set: function(key, value) {
+		key = 'edu.cmu.cs.http2dashboard.' + key;
+		sessionStorage[key] = JSON.stringify(value);
+	},
+
+	get: function(key) {
+		key = 'edu.cmu.cs.http2dashboard.' + key;
+		return sessionStorage[key] ? JSON.parse(sessionStorage[key]) : null;
+	},
+
+	exists: function(key) {
+		key = 'edu.cmu.cs.http2dashboard.' + key;
+		return sessionStorage[key] != null;
+	},
+};
+
+
+
+
+
+
+/* ========================= PLOTTING ======================== */
 // Build highcharts series entries
 function build_series(series_keys, series_labels, data, data_key) {
 	series = [];

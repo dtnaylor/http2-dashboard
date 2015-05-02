@@ -32,15 +32,41 @@ $.getJSON('{{ site.baseurl }}/data/support_by_country.json', function(data) {
 });
 
 $.getJSON('{{ site.baseurl }}/data/support_by_organization.json', function(data) {
-	$('#org-table').DataTable( {
-		data: data['values'],
-		order: [[ 1, 'desc' ]],  // initially sort by count
-		columns: [
-			{ data: 'name' },
-			{ data: 'value' }
-		]
-	} );
+
+	// Fill date menu
+	for (i=0; i < data.length; i++) {
+		crawl_date_menu = document.getElementById("org-date-menu");
+		crawl_date_menu.innerHTML =
+			crawl_date_menu.innerHTML
+			+ '<li><a href="javascript: set_org_crawl_date(' + i + ');">' 
+			+ data[i].pretty_date
+			+ '</a></li>';
+	}
+
+	set_org_crawl_date(0);  // start with most recent data
 });
+
+
+// TODO: Save data in session storage?
+function set_org_crawl_date(index) {
+	$.getJSON('{{ site.baseurl }}/data/support_by_organization.json', function(data) {
+
+		// set display date
+		display = document.getElementById("org-date-display");
+		display.innerHTML = data[index].pretty_date;
+
+		// load data into table
+		$('#org-table').DataTable( {
+			data: data[index]['values'],
+			order: [[ 1, 'desc' ]],  // initially sort by count
+			destroy: 'true', // make it possible to load new data
+			columns: [
+				{ data: 'name' },
+				{ data: 'value' }
+			]
+		} );
+	});
+}
 
 
 

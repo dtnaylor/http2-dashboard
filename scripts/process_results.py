@@ -171,23 +171,28 @@ def support_by_country(conf, out_file):
 
 def support_by_organization(conf, out_file):
 
-    # get most recent country support data
+    # get list of dates we have org data for
     dates = dates_for_prefix(conf['country_support_prefix'])
-    most_recent = dates[0].strftime('%a_%b_%-d_%Y')  # dash for no leading 0 on day
-    data_file = conf['organization_support_prefix'] + most_recent
 
-    # read the file & match countries with codes
-    data = {}
-    data['pretty_date'] = dates[0].strftime('%a, %b %d, %Y')
-    data['values'] = []
-    with open(data_file, 'r') as f:
-        for line in f:
-            org, count = line.strip().split()
-            org = org.replace('-', ' ')
-            data['values'].append({
-                'name': org,
-                'value': int(count)
-            })
+    data = []
+    for date in dates[:7]:  # TODO: first of each month all the way back?
+        date_file_suffix = date.strftime('%a_%b_%-d_%Y')  # dash for no leading 0 on day
+        data_file = conf['organization_support_prefix'] + date_file_suffix
+
+        values = []
+        with open(data_file, 'r') as f:
+            for line in f:
+                org, count = line.strip().split()
+                org = org.replace('-', ' ')
+                values.append({
+                    'name': org,
+                    'value': int(count)
+                })
+
+        data.append({
+            'pretty_date': date.strftime('%a, %b %d, %Y'),
+            'values': values
+        })
 
     with open(out_file, 'w') as f:
         json.dump(data, f)

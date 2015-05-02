@@ -56,10 +56,25 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 
 <!-- BY ORGANIZATION -->
 <div class="row" style="margin-left: 10px; margin-bottom: 40px">
+	<!-- Header -->
 	<a name="organization" class="anchor-wrapper">
 		<h3 class="anchor">Support by Organization</h3>
 	</a>
+
+	<!-- Single button -->
+	<div class="btn-group">
+	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+		<span id="org-date-display">Date</span> <span class="caret"></span>
+	  </button>
+	  <ul class="dropdown-menu" role="menu" id="org-date-menu">
+		<!-- to be filled in programatically on page load -->
+	  </ul>
+	</div>
+</div> <!-- row -->
+
+<div class="row" style="margin-left: 10px; margin-bottom: 40px">
 	<div class="col-md-8 col-md-offset-2">
+
 
 		<table id="org-table" class="table table-hover">
 		  <col width="80%">
