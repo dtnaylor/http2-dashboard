@@ -1,6 +1,35 @@
 ---
 layout: platform
-title: Measurement Platform Overview
+title: Measurement Platform
 ---
 
-<h1 class="page-header">Measurment Platform Overview</h1>
+<h1 class="page-header">Measurment Platform</h1>
+
+
+<div class="row" style="margin-left: 10px; margin-bottom: 20px">
+	<div class="col-md-12">
+		<p style="text-align: center;"><img src="{{ site.baseurl }}/img/pipeline@2x.png" style="width: 100%; max-width: 1000px;"/></p>
+	</div> <!-- col -->
+</div> <!-- row -->
+
+
+<div class="row" style="margin-left: 10px; margin-bottom: 20px">
+	<div class="col-md-10 col-md-offset-1">
+		Our measurements run in three phases:
+		<ul>
+			<li><b>Phase I:</b> Workers on PlanetLab probe the top 1 million
+			Alexa sites, using NPN to determine which sites <i>announce</i>
+			HTTP/2 support. <i>(Runs daily.)</i></li>
+
+			<li><b>Phase II:</b> Workers in our labs in Cleveland, USA and
+			Barcelona, Spain attempt to fetch the root object for each site
+			that claims to support HTTP/2. The result is a list of sites that
+			<i>actually</i> support HTTP/2. <i>(Runs daily.)</i></li>
+
+			<li><b>Phase III:</b> One worker in Barcelona, Spain fetches each
+			site that actually supports HTTP/2 using HTTP/1.1, SPDY, and HTTP/2
+			and records performance and usage information like page load time
+			and number of TCP connections used. <i>(Runs weekly.)</i></li>
+		</ul>
+	</div> <!-- col -->
+</div> <!-- row -->
