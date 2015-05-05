@@ -402,28 +402,28 @@ def main():
     summary(conf, out_file)
     
     # SUPPORT BY DATE
-    #out_file = os.path.join(args.outdir, 'support_by_date.json')
-    #support_by_date(conf, out_file)
+    out_file = os.path.join(args.outdir, 'support_by_date.json')
+    support_by_date(conf, out_file)
 
     # SUPPORT BY COUNTRY
-    #out_file = os.path.join(args.outdir, 'support_by_country.json')
-    #support_by_country(conf, out_file)
+    out_file = os.path.join(args.outdir, 'support_by_country.json')
+    support_by_country(conf, out_file)
     
     # SUPPORT BY ORGANIZATION
-    #out_file = os.path.join(args.outdir, 'support_by_organization.json')
-    #support_by_organization(conf, out_file)
+    out_file = os.path.join(args.outdir, 'support_by_organization.json')
+    support_by_organization(conf, out_file)
 
     # ACTIVE WORKERS
-    #out_file = os.path.join(args.outdir, 'active_workers.json')
-    #active_workers(conf, out_file)
+    out_file = os.path.join(args.outdir, 'active_workers.json')
+    active_workers(conf, out_file)
     
     # TASK COMPLETION
-    #out_file = os.path.join(args.outdir, 'task_completion.json')
-    #task_completion(conf, out_file)
+    out_file = os.path.join(args.outdir, 'task_completion.json')
+    task_completion(conf, out_file)
     
     # USAGE AND PERFORMANCE
-    #out_file = os.path.join(args.outdir, 'usage.json')
-    #usage_and_performance(conf, out_file)
+    out_file = os.path.join(args.outdir, 'usage.json')
+    usage_and_performance(conf, out_file)
         
 
 

@@ -1,6 +1,8 @@
 _site/
 .sass-cache/
 scripts/sample
+scripts/results
+scripts/sync.log
 www/data
 scripts/data
 *.pyc
