@@ -3,6 +3,7 @@ _site/
 scripts/sample
 scripts/results
 scripts/sync.log
+scripts/sync.stdout
 www/data
 scripts/data
 *.pyc
