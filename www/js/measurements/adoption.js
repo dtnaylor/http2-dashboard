@@ -36,24 +36,6 @@ $.getJSON('{{ site.baseurl }}/data/support_by_organization.json', function(data)
 });
 
 
-/*
- * Fill menu with available crawl dates.
- * 	menu: the id of a ul element inside a bootstrap dropdown button
- *	data: array whose entries are dictionaries, each containing a "pretty_date" element
- *	change_callback: function to be called when user changes date;
- *		input to the function is the index in data the user picked
- */
-function fill_date_menu(menu, data, change_callback) {
-	for (i=0; i < data.length; i++) {
-		crawl_date_menu = document.getElementById(menu);
-		crawl_date_menu.innerHTML =
-			crawl_date_menu.innerHTML
-			+ '<li><a href="javascript: ' + change_callback + '(' + i + ');">' 
-			+ data[i].pretty_date
-			+ '</a></li>';
-	}
-}
-
 
 
 // TODO: Save data in session storage?

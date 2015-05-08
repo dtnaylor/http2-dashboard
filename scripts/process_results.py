@@ -248,7 +248,7 @@ def active_workers(conf, out_file):
     #   'pretty_date' -> date as string
     #   'counts' -> list of [time, count] pairs
     data = []
-    for date in dates:
+    for date in dates_to_show(dates):
         # read time/count pairs from file
         in_file = conf['active_workers_prefix'] + date.strftime('%a_%b_%-d_%Y')
         time_count_pairs = []
@@ -282,7 +282,7 @@ def task_completion(conf, out_file):
     #   'pretty_date' -> date as string
     #   'time_hist' -> list of (time, count) pairs
     data = []
-    for date in dates:
+    for date in dates_to_show(dates):
         # read completion times
         in_file = conf['task_completion_prefix'] + date.strftime('%a_%b_%-d_%Y')
         completion_times = []
@@ -358,7 +358,7 @@ def usage_and_performance(conf, out_file):
 
     # convert to output format (for hists and CDFs)
     data = []
-    for date in sorted(temp_data.keys(), reverse=True):
+    for date in sorted(temp_data.keys(), reverse=True):  # TODO: dates to show
         proto_data = {}
         for proto in temp_data[date]:
             proto_data[proto] = {

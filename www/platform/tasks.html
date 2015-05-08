@@ -4,6 +4,17 @@ title: Workers
 scripts: ['js/platform/tasks.js']
 ---
 
-<h1 class="page-header">Tasks</h1>
+<h1 class="page-header">Tasks
+
+	<!-- Date Menu -->
+	<div class="btn-group pull-right">
+	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+		<span id="tasks-date-display">Date</span> <span class="caret"></span>
+	  </button>
+	  <ul class="dropdown-menu" role="menu" id="tasks-date-menu">
+		<!-- to be filled in programatically on page load -->
+	  </ul>
+	</div>
+</h1>
 
 <div id="completion-time" style="min-width: 310px; height: 400px; margin: 0 auto"></div>

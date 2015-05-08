@@ -4,6 +4,18 @@ title: Workers
 scripts: ['js/platform/workers.js']
 ---
 
-<h1 class="page-header">Active Workers</h1>
+<h1 class="page-header">Active Workers
+	
+	<!-- Date Menu -->
+	<div class="btn-group pull-right">
+	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+		<span id="workers-date-display">Date</span> <span class="caret"></span>
+	  </button>
+	  <ul class="dropdown-menu" role="menu" id="workers-date-menu">
+		<!-- to be filled in programatically on page load -->
+	  </ul>
+	</div>
+
+</h1>
 
 <div id="active-workers" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
