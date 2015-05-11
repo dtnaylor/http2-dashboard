@@ -86,7 +86,7 @@ def main():
         rsync_cmd = '%s -avz --no-g --delete %s %s' %\
             (RSYNC, DATA_DIR, WEB_DIR)
         logging.debug('Running rsync: %s', rsync_cmd)
-        #subprocess.check_call(rsync_cmd.split())
+        subprocess.check_call(rsync_cmd.split())
     except:
         logging.exception('Error copying profiles to web server')
 
