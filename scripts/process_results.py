@@ -331,11 +331,11 @@ def usage_and_performance(conf, out_file):
     # read data and store in temp dict
     temp_data = defaultdict(dict)
     for fname in glob.glob(conf['usage_dir'] + '/*'):
-        m = re.match(r'([^_]*)_((Sun|Mon|Tue|Wed|Thu|Fri|Sat)_(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)_[0-9][0-9]?_[0-9]{4})', os.path.basename(fname))
+        m = re.match(r'([^_]*)_([0-9]{4}-[0-9]{2}-[0-9]{2})', os.path.basename(fname))
         if m:
             protocol = m.group(1)
             date_str = m.group(2)
-            date = datetime.datetime.strptime(date_str, '%a_%b_%d_%Y')
+            date = datetime.datetime.strptime(date_str, '%Y-%m-%d')
 
             objects = []
             conns = []
@@ -344,10 +344,10 @@ def usage_and_performance(conf, out_file):
             with open(fname, 'r') as f:
                 for line in f:
                     fields = line.strip().split()
-                    objects.append(float(fields[0]))
-                    conns.append(float(fields[1]))
-                    domains.append(float(fields[2]))
-                    plts.append(float(fields[3]))
+                    objects.append(float(fields[1]))
+                    conns.append(float(fields[3]))
+                    domains.append(float(fields[7]))
+                    plts.append(float(fields[8]))
 
             temp_data[date][protocol] = {
                 'num_objects': objects,
