@@ -83,12 +83,21 @@ def main():
     ##
     logging.info('Syncing data to web server.')
     try:
-        rsync_cmd = '%s -avz --no-g --delete %s %s' %\
-            (RSYNC, DATA_DIR, WEB_DIR)
-        logging.debug('Running rsync: %s', rsync_cmd)
-        subprocess.check_call(rsync_cmd.split())
+        aws_cmd = 'aws s3 sync %s s3://isthewebhttp2yet.com/data' % DATA_DIR
+        logging.debug('Running aws sync: %s', aws_cmd)
+        subprocess.check_call(aws_cmd.split())
     except:
-        logging.exception('Error copying profiles to web server')
+        logging.exception('Error copying profiles to AWS')
+    
+    
+    #logging.info('Syncing data to web server.')
+    #try:
+    #    rsync_cmd = '%s -avz --no-g --delete %s %s' %\
+    #        (RSYNC, DATA_DIR, WEB_DIR)
+    #    logging.debug('Running rsync: %s', rsync_cmd)
+    #    subprocess.check_call(rsync_cmd.split())
+    #except:
+    #    logging.exception('Error copying profiles to web server')
 
 
 
