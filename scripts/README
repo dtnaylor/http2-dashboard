@@ -1,0 +1,4 @@
+sync.py pulls data from mplane, processes it, and uploads the resulting json
+data files to AWS.
+
+sync_to_s3.sh uploads the static site files to AWS.
