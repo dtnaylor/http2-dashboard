@@ -116,6 +116,7 @@ country_to_code = {
 	"Hungary": "HU",
 	"Iceland": "IS",
 	"India": "IN",
+	"India India": "IN",
 	"Indonesia": "ID",
 	"Iran, Islamic Republic of": "IR",
 	"Iran": "IR",
