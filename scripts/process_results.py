@@ -59,7 +59,12 @@ def read_time_series(filepath):
                 # parse the line
                 if line.strip() == '': continue
                 count, date = line.strip().split()
-                count = int(count)
+                try:
+                    count = int(count)
+                except:
+                    if count != 'NA':
+                        logging.warn('Invalid count: %s' % count)
+                    continue
                 date = datetime.datetime.strptime(date, '%a_%b_%d_%Y')
 
                 # if this is the first entry, set start_date
