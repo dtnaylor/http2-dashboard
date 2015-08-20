@@ -23,6 +23,7 @@ DATA_DIR = './data'
 WEB_DIR = '/afs/cs.cmu.edu/project/http2dashboard/www'
 REMOTE_RESULT_DIR = 'mplane:/home/varvello/HTTP-2/results'
 LOCAL_RESULT_DIR = '.'
+SMTP_CREDENTIALS = './smtp.conf'
 
 
 def setup_logging():
@@ -42,6 +43,22 @@ def setup_logging():
     file_handler.setFormatter(logging.Formatter(fmt=logfmt))
     file_handler.setLevel(level)
     logging.getLogger('').addHandler(file_handler)
+
+    # send errors by email
+    try:
+        smtp_conf = None
+        with open(SMTP_CREDENTIALS, 'r') as f:
+            smtp_conf = eval(f.read())
+
+        email_handler = handlers.SMTPHandler(\
+            smtp_conf['server'], 'dtbn07@gmail.com',\
+            ['dtbn07@gmail.com'], 'HTTP/2 Dashboard Error',\
+            credentials=smtp_conf['credentials'], secure=())
+        email_handler.setFormatter(logging.Formatter(fmt=logfmt))
+        email_handler.setLevel(logging.ERROR)
+        logging.getLogger('').addHandler(email_handler)
+    except:
+        logging.exception('Error loading SMTP conf')
 
 
 
