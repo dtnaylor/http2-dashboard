@@ -295,6 +295,7 @@ country_to_code = {
 	"British Virgin": "VG",
 	"BritishVirgin": "VG",
 	"Virgin Islands, U.S.": "VI",
+	"US Virgin": "VI",
 	"Wallis and Futuna": "WF",
 	"Western Sahara": "EH",
 	"Yemen": "YE",
