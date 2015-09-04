@@ -17,7 +17,7 @@ $.getJSON('{{ site.baseurl }}/data/summary.json', function(data) {
 	actual_progress_bar.style.width = actual_percent + '%';
 	actual_progress_bar.classList.add(bar_color(actual_percent));
 	actual_text = document.getElementById('actual-text');
-	actual_text.innerHTML = actual_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " of the Alexa top 1 million sites <b>actually</b> support HTTP/2.<br>&nbsp;"
+	actual_text.innerHTML = actual_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " of the Alexa top 1 million sites <b>actually</b> support HTTP/2."
 });
 
 
