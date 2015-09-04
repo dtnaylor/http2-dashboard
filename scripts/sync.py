@@ -10,13 +10,14 @@ import sys
 import argparse
 import logging
 import subprocess
+import process_results
 
 from logging import handlers
 
 
 # tools
 RSYNC = '/usr/bin/env rsync'
-PROCESS_RESULTS = './process_results.py'
+#PROCESS_RESULTS = './process_results.py'
 
 # config
 DATA_DIR = './data'
@@ -55,7 +56,7 @@ def setup_logging():
             ['dtbn07@gmail.com'], 'HTTP/2 Dashboard Error',\
             credentials=smtp_conf['credentials'], secure=())
         email_handler.setFormatter(logging.Formatter(fmt=logfmt))
-        email_handler.setLevel(logging.ERROR)
+        email_handler.setLevel(logging.WARN)
         logging.getLogger('').addHandler(email_handler)
     except:
         logging.exception('Error loading SMTP conf')
@@ -87,9 +88,10 @@ def main():
     ##
     logging.info('Processing results.')
     try:
-        process_cmd = '%s -c production.conf' % PROCESS_RESULTS
-        logging.debug('Running process_results.py: %s', process_cmd)
-        subprocess.check_call(process_cmd.split())
+        process_results.run('./production.conf', './data')
+        #process_cmd = '%s -c production.conf' % PROCESS_RESULTS
+        #logging.debug('Running process_results.py: %s', process_cmd)
+        #subprocess.check_call(process_cmd.split())
     except:
         logging.exception('Error processing results from mplane')
         sys.exit(-1)  # TODO: keep going under certain errors?

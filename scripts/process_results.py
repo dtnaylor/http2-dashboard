@@ -200,11 +200,20 @@ def support_by_country(conf, out_file):
             for line in f:
                 country, count = line.strip().split()
                 country = country.replace('-', ' ')
-                values.append({
-                    'name': country,
-                    'code': country_to_code[country],  # TODO: catch value error
-                    'value': int(count)
-                })
+                try:
+                    values.append({
+                        'name': country,
+                        'code': country_to_code[country],
+                        'value': int(count)
+                    })
+                except KeyError:
+                    if country != 'NA':
+                        logging.warn('Unknown country: %s' % country)
+                except ValueError:
+                    if count != 'NA':
+                        logging.warn('Invalid count: %s' % count)
+                except:
+                    logging.exception('Error processing row in %s' % data_file)
 
         data.append({
             'pretty_date': date.strftime('%a, %b %d, %Y'),
@@ -229,10 +238,16 @@ def support_by_organization(conf, out_file):
             for line in f:
                 org, count = line.strip().split()
                 org = org.replace('-', ' ')
-                values.append({
-                    'name': org,
-                    'value': int(count)
-                })
+                try:
+                    values.append({
+                        'name': org,
+                        'value': int(count)
+                    })
+                except ValueError:
+                    if count != 'NA':
+                        logging.warn('Invalid count: %s' % count)
+                except:
+                    logging.exception('Error processing row in %s' % data_file)
 
         data.append({
             'pretty_date': date.strftime('%a, %b %d, %Y'),
@@ -391,46 +406,53 @@ def usage_and_performance(conf, out_file):
     
         
 
+##
+## RUN
+##
+def run(conf_path, outdir):
+    # load conf
+    conf = load_conf(conf_path)
+
+    # make output data dir if it doesn't exist
+    if not os.path.exists(outdir):
+        os.makedirs(outdir)
+    
+    # SUMMARY
+    out_file = os.path.join(outdir, 'summary.json')
+    summary(conf, out_file)
+    
+    # SUPPORT BY DATE
+    out_file = os.path.join(outdir, 'support_by_date.json')
+    support_by_date(conf, out_file)
+
+    # SUPPORT BY COUNTRY
+    out_file = os.path.join(outdir, 'support_by_country.json')
+    support_by_country(conf, out_file)
+    
+    # SUPPORT BY ORGANIZATION
+    out_file = os.path.join(outdir, 'support_by_organization.json')
+    support_by_organization(conf, out_file)
+
+    # ACTIVE WORKERS
+    out_file = os.path.join(outdir, 'active_workers.json')
+    active_workers(conf, out_file)
+    
+    # TASK COMPLETION
+    out_file = os.path.join(outdir, 'task_completion.json')
+    task_completion(conf, out_file)
+    
+    # USAGE AND PERFORMANCE
+    out_file = os.path.join(outdir, 'usage.json')
+    usage_and_performance(conf, out_file)
+
 
 
 ##
 ## MAIN
 ##
 def main():
-
-    # make output data dir if it doesn't exist
-    if not os.path.exists(args.outdir):
-        os.makedirs(args.outdir)
-    
-    # SUMMARY
-    out_file = os.path.join(args.outdir, 'summary.json')
-    summary(conf, out_file)
-    
-    # SUPPORT BY DATE
-    out_file = os.path.join(args.outdir, 'support_by_date.json')
-    support_by_date(conf, out_file)
-
-    # SUPPORT BY COUNTRY
-    out_file = os.path.join(args.outdir, 'support_by_country.json')
-    support_by_country(conf, out_file)
-    
-    # SUPPORT BY ORGANIZATION
-    out_file = os.path.join(args.outdir, 'support_by_organization.json')
-    support_by_organization(conf, out_file)
-
-    # ACTIVE WORKERS
-    out_file = os.path.join(args.outdir, 'active_workers.json')
-    active_workers(conf, out_file)
-    
-    # TASK COMPLETION
-    out_file = os.path.join(args.outdir, 'task_completion.json')
-    task_completion(conf, out_file)
-    
-    # USAGE AND PERFORMANCE
-    out_file = os.path.join(args.outdir, 'usage.json')
-    usage_and_performance(conf, out_file)
+    run(args.config, args.outdir)
         
-
 
 
 
@@ -446,9 +468,6 @@ if __name__ == "__main__":
     parser.add_argument('-v', '--verbose', action='store_true', default=False, help='print debug info. --quiet wins if both are present')
     args = parser.parse_args()
     
-    # load conf
-    conf = load_conf(args.config)
-
     # set up logging
     setup_logging()
     
