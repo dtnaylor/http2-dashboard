@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 country_to_code = {
 	"Afghanistan": "AF",
 	"Aland Islands": "AX",
@@ -67,6 +69,7 @@ country_to_code = {
 	"Croatia": "HR",
 	"Cuba": "CU",
 	"Curacao": "CW",
+	"Curaçao": "CW",
 	"Cyprus": "CY",
 	"Czech Republic": "CZ",
 	"CzechRepublic": "CZ",
