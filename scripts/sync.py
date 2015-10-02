@@ -96,14 +96,14 @@ def main():
     ##
     ## Copy new data to web server
     ##
-    logging.info('Syncing data to web server.')
-    try:
-        aws_cmd = 'aws s3 sync %s s3://isthewebhttp2yet.com/data' % DATA_DIR
-        logging.debug('Running aws sync: %s', aws_cmd)
-        subprocess.check_call(aws_cmd.split())
-    except:
-        logging.exception('Error copying profiles to AWS')
-    
+    if not args.local:
+        logging.info('Syncing data to web server.')
+        try:
+            aws_cmd = 'aws s3 sync %s s3://isthewebhttp2yet.com/data' % DATA_DIR
+            logging.debug('Running aws sync: %s', aws_cmd)
+            subprocess.check_call(aws_cmd.split())
+        except:
+            logging.exception('Error copying profiles to AWS')
     
     logging.info('Done.')
 
@@ -113,6 +113,7 @@ if __name__ == "__main__":
     # set up command line args
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,\
                                      description='Process new H2 crawl data and update site.')
+    parser.add_argument('-l', '--local', action='store_true', default=False, help='Local test; do not copy data to web server.')
     parser.add_argument('-q', '--quiet', action='store_true', default=False, help='only print errors')
     parser.add_argument('-v', '--verbose', action='store_true', default=False, help='print debug info. --quiet wins if both are present')
     args = parser.parse_args()
