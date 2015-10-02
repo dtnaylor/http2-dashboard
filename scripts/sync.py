@@ -17,7 +17,6 @@ from logging import handlers
 
 # tools
 RSYNC = '/usr/bin/env rsync'
-#PROCESS_RESULTS = './process_results.py'
 
 # config
 DATA_DIR = './data'
@@ -88,10 +87,7 @@ def main():
     ##
     logging.info('Processing results.')
     try:
-        process_results.run('./production.conf', './data')
-        #process_cmd = '%s -c production.conf' % PROCESS_RESULTS
-        #logging.debug('Running process_results.py: %s', process_cmd)
-        #subprocess.check_call(process_cmd.split())
+        process_results.run('./production.conf', DATA_DIR)
     except:
         logging.exception('Error processing results from mplane')
         sys.exit(-1)  # TODO: keep going under certain errors?
@@ -108,18 +104,6 @@ def main():
     except:
         logging.exception('Error copying profiles to AWS')
     
-    
-    #logging.info('Syncing data to web server.')
-    #try:
-    #    rsync_cmd = '%s -avz --no-g --delete %s %s' %\
-    #        (RSYNC, DATA_DIR, WEB_DIR)
-    #    logging.debug('Running rsync: %s', rsync_cmd)
-    #    subprocess.check_call(rsync_cmd.split())
-    #except:
-    #    logging.exception('Error copying profiles to web server')
-
-
-
     
     logging.info('Done.')
 
