@@ -62,8 +62,8 @@ def read_time_series(filepath):
                 try:
                     count = int(count)
                 except:
-                    if count != 'NA':
-                        logging.warn('Invalid count: %s' % count)
+                    if count not in ('NA', 'NaN'):
+                        logging.warn('Invalid count: %s  (%s)' % (count, filepath))
                     continue
                 date = datetime.datetime.strptime(date, '%a_%b_%d_%Y')
 
@@ -208,7 +208,7 @@ def support_by_country(conf, out_file):
                     })
                 except KeyError:
                     if country != 'NA':
-                        logging.warn('Unknown country: %s' % country)
+                        logging.warn('Unknown country: %s  (%s)' % (country, data_file))
                 except ValueError:
                     if count != 'NA':
                         logging.warn('Invalid count: %s' % count)

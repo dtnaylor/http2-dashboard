@@ -46,20 +46,21 @@ def setup_logging():
     logging.getLogger('').addHandler(file_handler)
 
     # send errors by email
-    try:
-        smtp_conf = None
-        with open(SMTP_CREDENTIALS, 'r') as f:
-            smtp_conf = eval(f.read())
+    if not args.no_email:
+        try:
+            smtp_conf = None
+            with open(SMTP_CREDENTIALS, 'r') as f:
+                smtp_conf = eval(f.read())
 
-        email_handler = handlers.SMTPHandler(\
-            smtp_conf['server'], 'dtbn07@gmail.com',\
-            ['dtbn07@gmail.com'], 'HTTP/2 Dashboard Error',\
-            credentials=smtp_conf['credentials'], secure=())
-        email_handler.setFormatter(logging.Formatter(fmt=logfmt))
-        email_handler.setLevel(logging.WARN)
-        logging.getLogger('').addHandler(email_handler)
-    except:
-        logging.exception('Error loading SMTP conf')
+            email_handler = handlers.SMTPHandler(\
+                smtp_conf['server'], 'dtbn07@gmail.com',\
+                ['dtbn07@gmail.com'], 'HTTP/2 Dashboard Error',\
+                credentials=smtp_conf['credentials'], secure=())
+            email_handler.setFormatter(logging.Formatter(fmt=logfmt))
+            email_handler.setLevel(logging.WARN)
+            logging.getLogger('').addHandler(email_handler)
+        except:
+            logging.exception('Error loading SMTP conf')
 
 
 
@@ -129,6 +130,7 @@ if __name__ == "__main__":
     # set up command line args
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,\
                                      description='Process new H2 crawl data and update site.')
+    parser.add_argument('--no-email', action='store_true', default=False, help='Do not send error emails')
     parser.add_argument('-q', '--quiet', action='store_true', default=False, help='only print errors')
     parser.add_argument('-v', '--verbose', action='store_true', default=False, help='print debug info. --quiet wins if both are present')
     args = parser.parse_args()

@@ -126,6 +126,7 @@ country_to_code = {
 	"Iraq": "IQ",
 	"Ireland": "IE",
 	"Isle of Man": "IM",
+    "Isle of": "IM",
 	"Israel": "IL",
 	"Italy": "IT",
 	"Jamaica": "JM",
