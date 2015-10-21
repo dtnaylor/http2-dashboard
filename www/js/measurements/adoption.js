@@ -2,13 +2,14 @@
 ---
 $.getJSON('{{ site.baseurl }}/data/support_by_date.json', function(data) {
 	plot_time_series('#advertised-vs-actual-chart',
-		'Announced Support vs. Actual Support',
+		'Announced, Partial, and True Support',
 		data,
-		['advertised_support_by_date', 'actual_support_by_date'],
-		['Announced Support', 'Actual Support']);
+		['advertised_support_by_date', 'partial_support_by_date', 'true_support_by_date'],
+		['Announced Support', 'Partial Support', 'True Support'],
+		['#F0AD4E', '#5BC0DE', '#5CB85C']);
 	
 	plot_time_series('#draft-versions-chart',
-		'Announced Support by Version',
+		'Breakdown by Protocol Version (Announced Support)',
 		data,
 		[
 		'spdy_2',
@@ -23,6 +24,16 @@ $.getJSON('{{ site.baseurl }}/data/support_by_date.json', function(data) {
 		 'H2 Draft 12', 'H2 Draft 14', 'H2 Draft 15', 'H2 Draft 16', 'H2 Draft 17']
 		);
 
+});
+
+$.getJSON('{{ site.baseurl }}/data/support_by_server.json', function(data) {
+	series_keys = Object.keys(data);
+	plot_time_series('#server-chart',
+		'Breakdown by Server (True Support?)',
+		data,
+		series_keys,
+		series_keys
+		);
 });
 
 $.getJSON('{{ site.baseurl }}/data/support_by_country.json', function(data) {
@@ -78,7 +89,7 @@ function set_org_crawl_date(index) {
 
 
 
-function plot_time_series(container, title, data, series_keys, series_labels) {
+function plot_time_series(container, title, data, series_keys, series_labels, series_colors) {
 	// Build highcharts series entries
 	series = [];
 	for (var i = 0; i < series_keys.length; i++) {
@@ -92,6 +103,11 @@ function plot_time_series(container, title, data, series_keys, series_labels) {
 								 data[key]['start_day']),
 			data: data[key]['counts']
 		});
+
+		// set color if custom colors were supplied
+		if (series_colors != null) {
+			series[i]['color'] = series_colors[i];
+		}
 	}
 
 	$(function () {

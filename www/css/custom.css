@@ -94,3 +94,25 @@ body {
 .main .page-header {
   margin-top: 0;
 }
+
+/*
+ * Link colors for H2 support levels
+ */
+.h2-announce {
+	color: #f0ad4e;
+}
+.h2-announce:hover {
+	color: #C99141;
+}
+.h2-partial {
+	color: #5BC0DE;
+}
+.h2-partial:hover {
+	color: #40879C;
+}
+.h2-true {
+	color: #5CB85C;
+}
+.h2-true:hover {
+	color: #4A944A;
+}

@@ -4,7 +4,61 @@ title: Adoption
 scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/measurements/adoption.js']
 ---
 
-<h1 class="page-header">HTTP 2.0 Adoption</h1>
+<h1 class="page-header">HTTP/2 Adoption</h1>
+
+
+<!-- SUPPORT DEFINITIONS -->
+<div class="row" style="margin-left: 10px; margin-bottom: 20px">
+	<div class="col-md-12">
+		<div align="center">
+			<table style="border-spacing: 50px 15px; border-collapse: separate;">
+				<tr>
+					<th><span style="font-size: x-large;" class="label label-warning">Announced Support</span></th>
+					<th><span style="font-size: x-large;" class="label label-info">Partial Support</span></th>
+					<th><span style="font-size: x-large;" class="label label-success">True Support</span></th>
+				</tr>
+				<tr>
+					<td style="max-width: 300px; vertical-align: top;">
+					<p>Sites advertise which application-layer protocols they
+					support using NPN/ALPN. If a site advertises HTTP/2, we
+					call this <b>announced support</b>.  <a href="#"
+					data-toggle="modal"
+					data-target="#announced-support-modal">more...</a></p>
+
+					<p><a href="#" class="h2-announce"><span class="glyphicon
+					glyphicon-arrow-down" style="padding-right: 5px;"
+					aria-hidden="true"></span>Download URL list</a>
+					</td>
+
+					<td style="max-width: 300px; vertical-align: top;">
+					<p> Some sites that announce HTTP/2 support immediately
+					downgrade the connection to HTTP 1.1 if a client makes a
+					request using HTTP/2. If a site responds using HTTP/2, even
+					just to return an error page or redirect, we classify this
+					as <b>partial support</b>.</p>
+
+					<p><a href="#" class="h2-partial"><span class="glyphicon
+					glyphicon-arrow-down" style="padding-right: 5px;"
+					aria-hidden="true"></span>Download URL list</a></td>
+					</td>
+					
+					<td style="max-width: 300px; vertical-align: top;">
+					<p> If a site actually serves page content using HTTP/2,
+					even if some embedded objects are still served over HTTP
+					1.1, we call this <b>true support</b>.  </p> 
+					
+					<p><a href="#" class="h2-true"><span class="glyphicon
+					glyphicon-arrow-down" style="padding-right: 5px;"
+					aria-hidden="true"></span>Download URL list</a></td>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div> <!-- row -->
+
+
+<hr>
 
 
 <!-- TABLE OF CONTENTS -->
@@ -13,6 +67,7 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 		<div align="center">
 			Jump:&nbsp;
 			<a href="#time">Support by Time</a>&nbsp;&nbsp;&bull;&nbsp;
+			<a href="#server">Support by Server</a>&nbsp;&nbsp;&bull;&nbsp;
 			<a href="#country">Support by Country</a>&nbsp;&nbsp;&bull;&nbsp;
 			<a href="#organization">Support by Organization</a>
 		</div>
@@ -21,22 +76,35 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 
 
 
+
 <!-- BY TIME -->
 <div class="row" style="margin-left: 10px; margin-bottom: 40px">
 	<a name="time" class="anchor-wrapper">
-		<h3 class="anchor">Support Over Time
-		<span class="pull-right" style="color:inherit;"data-toggle="modal" data-target="#announced-support-modal"><span class="glyphicon glyphicon-question-sign pull-right" style="font-size:20px"></span></span>
+		<h3 class="anchor">Support by Time
+		<!--<span class="pull-right" style="color:inherit;"data-toggle="modal" data-target="#announced-support-modal"><span class="glyphicon glyphicon-question-sign pull-right" style="font-size:20px"></span></span> -->
 		</h3>
 	</a>
 
 	<div class="col-md-12">
-		<div id="draft-versions-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<div id="advertised-vs-actual-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	</div> <!-- col -->
 </div> <!-- row -->
 <div class="row" style="margin-left: 10px; margin-bottom: 20px">
 	<div class="col-md-12">
+		<div id="draft-versions-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</div> <!-- col -->
+</div> <!-- row -->
 
-		<div id="advertised-vs-actual-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+
+<!-- BY SERVER -->
+<div class="row" style="margin-left: 10px; margin-bottom: 40px">
+	<a name="server" class="anchor-wrapper">
+		<h3 class="anchor">Support by Server</h3>
+	</a>
+
+	<div class="col-md-12">
+		<div id="server-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	</div> <!-- col -->
 </div> <!-- row -->
 

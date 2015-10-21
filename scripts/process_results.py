@@ -21,6 +21,10 @@ from country_codes import country_to_code
 sys.path.append('./myplot')
 import myplot
 
+DATE_FORMATS = ('%a_%b_%d_%Y',
+                '%Y-%m-%d',                
+)
+
 
 ##
 ## HELPER FUNCTIONS
@@ -49,7 +53,18 @@ def load_conf(conf_file):
 
     return conf
 
-def read_time_series(filepath):
+def parse_date(date_str):
+    for fmt in DATE_FORMATS:
+        try:
+            date = datetime.datetime.strptime(date_str, fmt)
+        except ValueError:
+            pass  # try another format
+        else:
+            return date  # if we parsed date successfully, stop tyring more formats
+    else:  # no format succeeded
+        raise ValueError('Error parsing date: %s' % date_str)
+
+def read_time_series(filepath, date_first=False):
     try:
         with open(filepath, 'r') as f:
             counts = []
@@ -58,14 +73,23 @@ def read_time_series(filepath):
             for line in f:
                 # parse the line
                 if line.strip() == '': continue
-                count, date = line.strip().split()
+                if date_first:
+                    date, count = line.strip().split()
+                else:
+                    count, date = line.strip().split()
+
                 try:
                     count = int(count)
                 except:
                     if count not in ('NA', 'NaN'):
                         logging.warn('Invalid count: %s  (%s)' % (count, filepath))
                     continue
-                date = datetime.datetime.strptime(date, '%a_%b_%d_%Y')
+
+                try:
+                    date = parse_date(date)
+                except:
+                    logging.warn('Invalid date: %s  (%s)' % (date, filepath))
+                    continue
 
                 # if this is the first entry, set start_date
                 if not start_date:
@@ -146,11 +170,13 @@ def cdf(values, round_values=False):
 ##
 def summary(conf, out_file):
     announced_count = read_time_series(conf['advertised_support_by_date'])[0][-1]
-    actual_count = read_time_series(conf['actual_support_by_date'])[0][-1]
+    partial_count = read_time_series(conf['partial_support_by_date'])[0][-1]
+    true_count = read_time_series(conf['true_support_by_date'])[0][-1]
 
     data = {
         'announced_count': announced_count,
-        'actual_count': actual_count,
+        'partial_count': partial_count,
+        'true_count': true_count,
     }
     
     with open(out_file, 'w') as f:
@@ -158,7 +184,8 @@ def summary(conf, out_file):
 
 def support_by_date(conf, out_file):
     series = ['advertised_support_by_date',
-              'actual_support_by_date',
+              'partial_support_by_date',
+              'true_support_by_date',
               'h2_12_advertised_support_by_date',
               'h2_14_advertised_support_by_date',
               'h2_15_advertised_support_by_date',
@@ -175,6 +202,29 @@ def support_by_date(conf, out_file):
     for series_name in series:
         counts, start_date, interval =\
             read_time_series(conf[series_name])
+
+        data[series_name]['counts'] = counts
+        data[series_name]['start_year'] = start_date.year
+        data[series_name]['start_month'] = start_date.month-1
+        data[series_name]['start_day'] = start_date.day
+        data[series_name]['interval'] = interval
+
+    with open(out_file, 'w') as f:
+        json.dump(data, f)
+
+def support_by_server(conf, out_file):
+    series = glob.glob('%s/*' % conf['server_support_prefix'])
+    
+    # series name -> key (counts, start, interval) -> value
+    data = defaultdict(dict)
+
+    for series_path in series:
+        counts, start_date, interval =\
+            read_time_series(series_path, date_first=True)
+        series_name = os.path.split(series_path)[-1]
+
+        if counts == None or start_date == None or interval == None: continue
+        if counts[-1] < 100: continue  # TODO: smarter threshold
 
         data[series_name]['counts'] = counts
         data[series_name]['start_year'] = start_date.year
@@ -210,8 +260,8 @@ def support_by_country(conf, out_file):
                     if country != 'NA':
                         logging.warn('Unknown country: %s  (%s)' % (country, data_file))
                 except ValueError:
-                    if count != 'NA':
-                        logging.warn('Invalid count: %s' % count)
+                    if count not in ('NA', 'NaN'):
+                        logging.warn('Invalid count: %s  (%s)' % (count, data_file))
                 except:
                     logging.exception('Error processing row in %s' % data_file)
 
@@ -244,8 +294,8 @@ def support_by_organization(conf, out_file):
                         'value': int(count)
                     })
                 except ValueError:
-                    if count != 'NA':
-                        logging.warn('Invalid count: %s' % count)
+                    if count not in ('NA', 'NaN'):
+                        logging.warn('Invalid count: %s  (%s)' % (count, data_file))
                 except:
                     logging.exception('Error processing row in %s' % data_file)
 
@@ -424,6 +474,10 @@ def run(conf_path, outdir):
     # SUPPORT BY DATE
     out_file = os.path.join(outdir, 'support_by_date.json')
     support_by_date(conf, out_file)
+    
+    # SUPPORT BY SERVER
+    out_file = os.path.join(outdir, 'support_by_server.json')
+    support_by_server(conf, out_file)
 
     # SUPPORT BY COUNTRY
     out_file = os.path.join(outdir, 'support_by_country.json')
