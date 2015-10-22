@@ -1,5 +1,16 @@
 ---
 ---
+$.getJSON('{{ site.baseurl }}/data/lists.json', function(data) {
+	var announce_link = document.getElementById('h2-announce-list-link');
+	announce_link.href = '{{ site.baseurl }}/' + data['h2-announce-list'];
+	
+	var announce_link = document.getElementById('h2-partial-list-link');
+	announce_link.href = '{{ site.baseurl }}/' + data['h2-partial-list'];
+	
+	var announce_link = document.getElementById('h2-true-list-link');
+	announce_link.href = '{{ site.baseurl }}/' + data['h2-true-list'];
+});
+
 $.getJSON('{{ site.baseurl }}/data/support_by_date.json', function(data) {
 	plot_time_series('#advertised-vs-actual-chart',
 		'Announced, Partial, and True Support',
@@ -29,7 +40,7 @@ $.getJSON('{{ site.baseurl }}/data/support_by_date.json', function(data) {
 $.getJSON('{{ site.baseurl }}/data/support_by_server.json', function(data) {
 	series_keys = Object.keys(data);
 	plot_time_series('#server-chart',
-		'Breakdown by Server (True Support?)',
+		'Breakdown by Server (True Support)',
 		data,
 		series_keys,
 		series_keys

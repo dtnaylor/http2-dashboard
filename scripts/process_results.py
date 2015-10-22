@@ -6,6 +6,7 @@ dashboard site.
 
 import os
 import sys
+import shutil
 import argparse
 import logging
 import re
@@ -115,7 +116,7 @@ def read_time_series(filepath, date_first=False):
         logging.exception('Error reading time series: %s' % filepath)
         return None, None, None
 
-def dates_for_prefix(prefix, date_format='%a_%b_%d_%Y'):
+def dates_for_prefix(prefix, date_format='%Y-%m-%d'):
     dates = glob.glob(prefix + '*')
     dates = map(lambda x: 
         datetime.datetime.strptime(x.replace(prefix, ''), date_format)
@@ -242,7 +243,7 @@ def support_by_country(conf, out_file):
 
     data = []
     for date in dates_to_show(dates):
-        date_file_suffix = date.strftime('%a_%b_%-d_%Y')  # dash for no leading 0 on day
+        date_file_suffix = date.strftime('%Y-%m-%d')  # dash for no leading 0 on day
         data_file = conf['country_support_prefix'] + date_file_suffix
 
         values = []
@@ -280,7 +281,7 @@ def support_by_organization(conf, out_file):
 
     data = []
     for date in dates_to_show(dates):
-        date_file_suffix = date.strftime('%a_%b_%-d_%Y')  # dash for no leading 0 on day
+        date_file_suffix = date.strftime('%Y-%m-%d')  # dash for no leading 0 on day
         data_file = conf['organization_support_prefix'] + date_file_suffix
 
         values = []
@@ -320,7 +321,7 @@ def active_workers(conf, out_file):
     data = []
     for date in dates_to_show(dates):
         # read time/count pairs from file
-        in_file = conf['active_workers_prefix'] + date.strftime('%a_%b_%-d_%Y')
+        in_file = conf['active_workers_prefix'] + date.strftime('%Y-%m-%d')
         time_count_pairs = []
         with open(in_file, 'r') as f:
             for line in f:
@@ -354,7 +355,7 @@ def task_completion(conf, out_file):
     data = []
     for date in dates_to_show(dates):
         # read completion times
-        in_file = conf['task_completion_prefix'] + date.strftime('%a_%b_%-d_%Y')
+        in_file = conf['task_completion_prefix'] + date.strftime('%Y-%m-%d')
         completion_times = []
         with open(in_file, 'r') as f:
             for line in f:
@@ -451,6 +452,40 @@ def usage_and_performance(conf, out_file):
     with open(out_file, 'w') as f:
         json.dump(data, f)
 
+def url_list(conf, out_subdir, prefix):
+    # get most recent country support data
+    dates = dates_for_prefix(prefix)
+
+    # For now, just publish most recent
+    # TODO: Check file doesn't already exist?
+    # TODO: Check if we should copy old lists, in case script didn't run one day?
+    try:
+        date_file_suffix = dates[0].strftime('%Y-%m-%d')  # dash for no leading 0 on day
+        data_file = prefix + date_file_suffix
+        dest_file = os.path.join(out_subdir, '%s.txt' % os.path.split(data_file)[1])
+        shutil.copyfile(data_file, dest_file)
+        return dest_file
+    except:
+        logging.exception('Error copying URL list(s) for %s' % prefix)
+        return '#'  # link to nowhere
+
+def url_lists(conf, out_file, out_subdir):
+    if not os.path.isdir(out_subdir):
+        os.makedirs(out_subdir)
+
+    # TODO: actually look up most recent we have
+    announce_list = url_list(conf, out_subdir, conf['announce_list_dir'])
+    partial_list = url_list(conf, out_subdir, conf['partial_list_dir'])
+    true_list = url_list(conf, out_subdir, conf['true_list_dir'])
+
+    data = {}
+    data['h2-announce-list'] = announce_list
+    data['h2-partial-list'] = partial_list
+    data['h2-true-list'] = true_list
+    
+    with open(out_file, 'w') as f:
+        json.dump(data, f)
+
 
 
     
@@ -481,11 +516,11 @@ def run(conf_path, outdir):
 
     # SUPPORT BY COUNTRY
     out_file = os.path.join(outdir, 'support_by_country.json')
-    support_by_country(conf, out_file)
+    #support_by_country(conf, out_file)
     
     # SUPPORT BY ORGANIZATION
     out_file = os.path.join(outdir, 'support_by_organization.json')
-    support_by_organization(conf, out_file)
+    #support_by_organization(conf, out_file)
 
     # ACTIVE WORKERS
     out_file = os.path.join(outdir, 'active_workers.json')
@@ -498,6 +533,11 @@ def run(conf_path, outdir):
     # USAGE AND PERFORMANCE
     out_file = os.path.join(outdir, 'usage.json')
     usage_and_performance(conf, out_file)
+
+    # URL LISTS
+    out_file = os.path.join(outdir, 'lists.json')
+    out_subdir = os.path.join(outdir, 'lists')
+    url_lists(conf, out_file, out_subdir)
 
 
 

@@ -25,7 +25,8 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 					data-toggle="modal"
 					data-target="#announced-support-modal">more...</a></p>
 
-					<p><a href="#" class="h2-announce"><span class="glyphicon
+					<p><a id="h2-announce-list-link" href="#"
+					class="h2-announce"><span class="glyphicon
 					glyphicon-arrow-down" style="padding-right: 5px;"
 					aria-hidden="true"></span>Download URL list</a>
 					</td>
@@ -37,7 +38,8 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 					just to return an error page or redirect, we classify this
 					as <b>partial support</b>.</p>
 
-					<p><a href="#" class="h2-partial"><span class="glyphicon
+					<p><a id="h2-partial-list-link" href="#"
+					class="h2-partial"><span class="glyphicon
 					glyphicon-arrow-down" style="padding-right: 5px;"
 					aria-hidden="true"></span>Download URL list</a></td>
 					</td>
@@ -47,8 +49,9 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 					even if some embedded objects are still served over HTTP
 					1.1, we call this <b>true support</b>.  </p> 
 					
-					<p><a href="#" class="h2-true"><span class="glyphicon
-					glyphicon-arrow-down" style="padding-right: 5px;"
+					<p><a id="h2-true-list-link" href="#" class="h2-true"><span
+					class="glyphicon glyphicon-arrow-down"
+					style="padding-right: 5px;"
 					aria-hidden="true"></span>Download URL list</a></td>
 					</td>
 				</tr>
@@ -100,7 +103,9 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 <!-- BY SERVER -->
 <div class="row" style="margin-left: 10px; margin-bottom: 40px">
 	<a name="server" class="anchor-wrapper">
-		<h3 class="anchor">Support by Server</h3>
+		<h3 class="anchor">Support by Server
+		<!--<span style="padding-left: 5px;" class="label label-success">True Support</span>-->
+		</h3>
 	</a>
 
 	<div class="col-md-12">
