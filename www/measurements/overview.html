@@ -5,28 +5,38 @@ scripts: ['js/measurements/overview.js']
 ---
 
 
-<div class="row" style="margin-top: 70px">
-	<!-- ANNOUNCED SUPPORT -->
-	<div class="col-md-5 col-md-offset-1">
-		<div class="jumbotron">
-		  <h2>Announced Support</h2>
-		  <p id="announced-text"></p>
+<div class="row" style="margin-top: 70px; margin-bottom: 50px;">
+	<div class="col-md-8 col-md-offset-2">
+		<h1>HTTP/2 Support<br/>
+		<small>In the top 1 million Alexa sites</small></h1>
 
-		  <div class="progress">
-		  	<div id="announced-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="1000000" style="width: 0%;"></div>
-		  </div>
+		</br>
+
+		<div style="height: 40px;" class="progress">
+		  <div id="true-progress-bar"  class="progress-bar progress-bar-success" style="width: 0%"></div>
+		  <div id="partial-progress-bar" class="progress-bar progress-bar-info" style="width: 0%"></div>
+		  <div id="announced-progress-bar" class="progress-bar progress-bar-warning" style="width: 0%"></div>
 		</div>
 	</div> <!-- col -->
-	
-	<!-- ACTUAL SUPPORT -->
-	<div class="col-md-5">
-		<div class="jumbotron">
-		  <h2>Actual Support</h2>
-		  <p id="actual-text"></p>
+</div> <!-- row -->
 
-		  <div class="progress">
-		  	<div id="actual-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="1000000" style="width: 0%;"></div>
-		  </div>
-		</div>
+<div class="row">
+	<div class="col-md-8 col-md-offset-2">
+		<table align="center" style="border-spacing: 20px 15px; border-collapse: separate;">
+			<tr>
+				<td align="right"><span class="label label-warning" style="font-size: 21px">Announced Support</span></td>
+				<td><p id="announced-text" style="font-size: 21px; font-weight: 200; padding-top: 7px;"></p></td>
+			</tr>
+			<tr>
+				<td align="right"><span class="label label-info" style="font-size: 21px">Partial Support</span></td>
+				<td><p id="partial-text" style="font-size: 21px; font-weight: 200; padding-top: 7px;"></p></td>
+			</tr>
+			<tr>
+				<td align="right"><span class="label label-success" style="font-size: 21px">True Support</span></td>
+				<td><p id="true-text" style="font-size: 21px; font-weight: 200; padding-top: 7px;"></p></td>
+			</tr>
+		</table>
+
+		<div align="center"><p><a class="subtle" href="{{ site.baseurl }}/measurements/adoption.html">What does this mean?</a></p></div>
 	</div> <!-- col -->
 </div> <!-- row -->

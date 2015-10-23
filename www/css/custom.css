@@ -116,3 +116,10 @@ body {
 .h2-true:hover {
 	color: #4A944A;
 }
+
+.subtle {
+	color: #aaaaaa;
+}
+.subtle:hover {
+	color: #888888;
+}
