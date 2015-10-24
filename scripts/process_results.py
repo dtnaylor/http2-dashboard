@@ -402,11 +402,12 @@ def usage_and_performance(conf, out_file):
     # read data and store in temp dict
     temp_data = defaultdict(dict)
     for fname in glob.glob(conf['usage_dir'] + '/*'):
-        m = re.match(r'([^_]*)_([0-9]{4}-[0-9]{2}-[0-9]{2})', os.path.basename(fname))
+        #m = re.match(r'([^_]*)_([0-9]{4}-[0-9]{2}-[0-9]{2})', os.path.basename(fname))
+        m = re.match(r'.*res-(.*)-(h[12])', os.path.basename(fname))  # assumes protocol name is h1 or h2
         if m:
-            protocol = m.group(1)
-            date_str = m.group(2)
-            date = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+            date_str = m.group(1)
+            protocol = m.group(2)
+            date = datetime.datetime.strptime(date_str, '%a_%b_%d_%Y')
 
             objects = []
             conns = []
@@ -417,13 +418,13 @@ def usage_and_performance(conf, out_file):
                     fields = line.strip().split()
                     objects.append(float(fields[1]))
                     conns.append(float(fields[3]))
-                    domains.append(float(fields[7]))
+                    #domains.append(float(fields[7]))
                     plts.append(float(fields[8]))
 
             temp_data[date][protocol] = {
                 'num_objects': objects,
                 'num_connections': conns,
-                'num_domains': domains,
+                #'num_domains': domains,
                 'plt': plts,
             }
 
@@ -437,8 +438,8 @@ def usage_and_performance(conf, out_file):
                 'num_objects_cdf': cdf(temp_data[date][proto]['num_objects'], round_values=True),
                 'num_connections_hist': histogram(temp_data[date][proto]['num_connections'], round_values=True),
                 'num_connections_cdf': cdf(temp_data[date][proto]['num_connections'], round_values=True),
-                'num_domains_hist': histogram(temp_data[date][proto]['num_domains'], round_values=True),
-                'num_domains_cdf': cdf(temp_data[date][proto]['num_domains'], round_values=True),
+                #'num_domains_hist': histogram(temp_data[date][proto]['num_domains'], round_values=True),
+                #'num_domains_cdf': cdf(temp_data[date][proto]['num_domains'], round_values=True),
                 'plt_hist': histogram(temp_data[date][proto]['plt'], round_values=True),
                 'plt_cdf': cdf(temp_data[date][proto]['plt'], round_values=True),
             }
