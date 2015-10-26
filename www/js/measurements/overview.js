@@ -21,7 +21,7 @@ $.getJSON('{{ site.baseurl }}/data/summary.json', function(data) {
 	var announced_count = data['announced_count'];
 	var announced_percent = announced_count / 1000000.0 * 100;   // TODO: denom is not 1M
 	announced_progress_bar = document.getElementById('announced-progress-bar');
-	announced_progress_bar.style.width = (announced_percent-partial_percent-true_percent) + '%';
+	announced_progress_bar.style.width = (announced_percent-partial_percent) + '%';
 	announced_text = document.getElementById('announced-text');
 	announced_text.innerHTML = announced_count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " sites <b>announce</b> support for HTTP/2."
 });
