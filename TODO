@@ -1,4 +1,4 @@
-- Selectively rsync results, don't want all the .tgz
 - Make X axes line up on time series plots
 - Add "True/Partial" tags to the section headers in adoption page
 - fix bug where if you click a link to an anchor on the page, the current page isn't highlighted in left menu after a refresh
+- email if data looks odd

@@ -217,21 +217,36 @@ def support_by_server(conf, out_file):
     series = glob.glob('%s/*' % conf['server_support_prefix'])
     
     # series name -> key (counts, start, interval) -> value
-    data = defaultdict(dict)
+    time_series = defaultdict(dict)
+
+    # list of (server, most recent count)
+    last_counts = []
 
     for series_path in series:
         counts, start_date, interval =\
             read_time_series(series_path, date_first=True)
         series_name = os.path.split(series_path)[-1]
 
+        print series_name, counts[-1]
+
         if counts == None or start_date == None or interval == None: continue
         if counts[-1] < 100: continue  # TODO: smarter threshold
 
-        data[series_name]['counts'] = counts
-        data[series_name]['start_year'] = start_date.year
-        data[series_name]['start_month'] = start_date.month-1
-        data[series_name]['start_day'] = start_date.day
-        data[series_name]['interval'] = interval
+        last_counts.append((series_name, counts[-1]))
+
+        time_series[series_name]['counts'] = counts
+        time_series[series_name]['start_year'] = start_date.year
+        time_series[series_name]['start_month'] = start_date.month-1
+        time_series[series_name]['start_day'] = start_date.day
+        time_series[series_name]['interval'] = interval
+
+    # sort in descending order by count
+    last_counts = sorted(last_counts, reverse=True, key=lambda pair: pair[1])
+
+    data = {
+        'keys': [pair[0] for pair in last_counts],
+        'time_series': time_series,
+    }
 
     with open(out_file, 'w') as f:
         json.dump(data, f)

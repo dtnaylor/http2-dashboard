@@ -17,7 +17,8 @@ $.getJSON('{{ site.baseurl }}/data/support_by_date.json', function(data) {
 		data,
 		['advertised_support_by_date', 'partial_support_by_date', 'true_support_by_date'],
 		['Announced Support', 'Partial Support', 'True Support'],
-		['#F0AD4E', '#5BC0DE', '#5CB85C']);
+		['#F0AD4E', '#5BC0DE', '#5CB85C'],
+		false);
 	
 	plot_time_series('#draft-versions-chart',
 		'Breakdown by Protocol Version (Announced Support)',
@@ -32,18 +33,21 @@ $.getJSON('{{ site.baseurl }}/data/support_by_date.json', function(data) {
 		'h2_16_advertised_support_by_date',
 		'h2_17_advertised_support_by_date'],
 		['SPDY 2', 'SPDY 3', 'SPDY 3.1',
-		 'H2 Draft 12', 'H2 Draft 14', 'H2 Draft 15', 'H2 Draft 16', 'H2 Draft 17']
+		 'H2 Draft 12', 'H2 Draft 14', 'H2 Draft 15', 'H2 Draft 16', 'H2 Draft 17'],
+		 null,
+		 false
 		);
 
 });
 
 $.getJSON('{{ site.baseurl }}/data/support_by_server.json', function(data) {
-	series_keys = Object.keys(data);
 	plot_time_series('#server-chart',
 		'Breakdown by Server (True Support)',
-		data,
-		series_keys,
-		series_keys
+		data['time_series'],
+		data['keys'],
+		data['keys'],
+		null,
+		true
 		);
 });
 
@@ -100,7 +104,7 @@ function set_org_crawl_date(index) {
 
 
 
-function plot_time_series(container, title, data, series_keys, series_labels, series_colors) {
+function plot_time_series(container, title, data, series_keys, series_labels, series_colors, ylog) {
 	// Build highcharts series entries
 	series = [];
 	for (var i = 0; i < series_keys.length; i++) {
@@ -121,6 +125,9 @@ function plot_time_series(container, title, data, series_keys, series_labels, se
 		}
 	}
 
+	var ymin = ylog ? 1 : 0;
+	var ytype = ylog ? 'logarithmic' : 'linear'
+
 	$(function () {
 		$(container).highcharts({
 			chart: {
@@ -139,8 +146,8 @@ function plot_time_series(container, title, data, series_keys, series_labels, se
 				minRange: 14 * 24 * 3600000 // fourteen days
 			},
 			yAxis: {
-				min: 0,
-				//type: 'logarithmic',
+				min: ymin,
+				type: ytype,
 				title: {
 					text: 'Number of Domains'
 				}
