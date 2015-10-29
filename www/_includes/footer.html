@@ -17,14 +17,15 @@
 	<!-- Highlight active tab in navbar and sidebar -->
 	<script>
 		var url = window.location;
+		url = url.href.split("#")[0];  // remove anchor
 		$('ul.nav a').filter(function() {
 			// If the tab we're checking has sub-pages, there are multiple
 			// pages that should set it to active
 			if (this.id == 'measurements-tab') {
-				return (url.href.indexOf('/measurements/') >= 0);
+				return (url.indexOf('/measurements/') >= 0);
 			}
 			else if (this.id == 'platform-tab') {
-				return (url.href.indexOf('/platform/') >= 0);
+				return (url.indexOf('/platform/') >= 0);
 			}
 			else {
 			return this.href == url;
