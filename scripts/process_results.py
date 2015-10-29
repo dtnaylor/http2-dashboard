@@ -25,6 +25,8 @@ import myplot
 DATE_FORMATS = ('%a_%b_%d_%Y',
                 '%Y-%m-%d',                
 )
+OUTLIER_THRESHOLD = 0.25
+OUTLIER_THRESHOLD_ABS = 5
 
 
 ##
@@ -64,6 +66,17 @@ def parse_date(date_str):
             return date  # if we parsed date successfully, stop tyring more formats
     else:  # no format succeeded
         raise ValueError('Error parsing date: %s' % date_str)
+
+def check_time_series_data(data_file, counts):
+    global outliers
+    if len(counts) < 2: return
+
+    diff = abs(counts[-1] - counts[-2])
+    if diff / float(counts[-2]) > OUTLIER_THRESHOLD\
+        and diff > OUTLIER_THRESHOLD_ABS:
+        outliers.append('Latest value changed more than 25%%: %i -> %i  (%s)' %\
+            (counts[-2], counts[-1], data_file))
+        
 
 def read_time_series(filepath, date_first=False):
     try:
@@ -110,6 +123,9 @@ def read_time_series(filepath, date_first=False):
 
                 counts.append(count)
                 last_date = date
+
+            # check for (possibly) bad data
+            check_time_series_data(filepath, counts)
 
         return counts, start_date, 24 * 3600 * 1000
     except Exception:
@@ -162,6 +178,14 @@ def cdf(values, round_values=False):
     if round_values:
         x_vals=map(round, x_vals)
     return zip(x_vals, counts)
+
+def outlier_report(outliers):
+    report = 'The following potential errors were discovered:\n'
+
+    for outlier in outliers:
+        report += '\n%s' % outlier
+
+    return report
 
 
 
@@ -513,6 +537,9 @@ def url_lists(conf, out_file, out_subdir):
 ## RUN
 ##
 def run(conf_path, outdir):
+    global outliers
+    outliers = []  # track & report "weird" results in case crawler broke
+
     # load conf
     conf = load_conf(conf_path)
 
@@ -556,6 +583,9 @@ def run(conf_path, outdir):
     out_file = os.path.join(outdir, 'lists.json')
     out_subdir = os.path.join(outdir, 'lists')
     url_lists(conf, out_file, out_subdir)
+
+    if len(outliers) > 0:
+        logging.warn(outlier_report(outliers))
 
 
 
