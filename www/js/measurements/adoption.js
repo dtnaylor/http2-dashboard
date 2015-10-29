@@ -37,6 +37,25 @@ $.getJSON('{{ site.baseurl }}/data/support_by_date.json', function(data) {
 		 null,
 		 false
 		);
+	
+	plot_time_series('#aux-protocols-chart',
+		'Auxiliary Protocols',
+		data,
+		[
+		'alpn',
+		'alpn-no-npn',
+		'h2c-announce',
+		'h2c-support',
+		],
+		[
+		'ALPN',
+		'ALPN without NPN',
+		'H2C (Announced)',
+		'H2C (True)',
+		],
+		 null,
+		 true
+		);
 
 });
 

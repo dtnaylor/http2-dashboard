@@ -61,22 +61,8 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 </div> <!-- row -->
 
 
-<hr>
-
-
 <!-- TABLE OF CONTENTS -->
-<div class="row" style="margin-left: 10px; margin-bottom: 20px">
-	<div class="col-md-12">
-		<div align="center">
-			Jump:&nbsp;
-			<a href="#time">Support by Time</a>&nbsp;&nbsp;&bull;&nbsp;
-			<a href="#server">Support by Server</a>&nbsp;&nbsp;&bull;&nbsp;
-			<a href="#country">Support by Country</a>&nbsp;&nbsp;&bull;&nbsp;
-			<a href="#organization">Support by Organization</a>
-		</div>
-	</div>
-</div> <!-- row -->
-
+{% include adoption_toc.html %}
 
 
 
@@ -97,7 +83,15 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 		<div id="draft-versions-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	</div> <!-- col -->
 </div> <!-- row -->
+<div class="row" style="margin-left: 10px; margin-bottom: 20px">
+	<div class="col-md-12">
+		<div id="aux-protocols-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</div> <!-- col -->
+</div> <!-- row -->
 
+
+<!-- TABLE OF CONTENTS -->
+{% include adoption_toc.html %}
 
 
 <!-- BY SERVER -->
@@ -113,6 +107,9 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 	</div> <!-- col -->
 </div> <!-- row -->
 
+
+<!-- TABLE OF CONTENTS -->
+{% include adoption_toc.html %}
 
 
 <!-- BY COUNTRY -->
@@ -138,6 +135,9 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 	</div> <!-- col -->
 </div> <!-- row -->
 
+
+<!-- TABLE OF CONTENTS -->
+{% include adoption_toc.html %}
 
 
 <!-- BY ORGANIZATION -->

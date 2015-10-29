@@ -195,6 +195,10 @@ def support_by_date(conf, out_file):
               'spdy_2',
               'spdy_3',
               'spdy_3.1',
+              'alpn',
+              'h2c-announce',
+              'h2c-support',
+              'alpn-no-npn',
              ]
     
     # series name -> key (counts, start, interval) -> value
@@ -226,8 +230,6 @@ def support_by_server(conf, out_file):
         counts, start_date, interval =\
             read_time_series(series_path, date_first=True)
         series_name = os.path.split(series_path)[-1]
-
-        print series_name, counts[-1]
 
         if counts == None or start_date == None or interval == None: continue
         if counts[-1] < 100: continue  # TODO: smarter threshold
