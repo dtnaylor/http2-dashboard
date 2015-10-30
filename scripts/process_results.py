@@ -70,6 +70,7 @@ def parse_date(date_str):
 def check_time_series_data(data_file, counts):
     global outliers
     if len(counts) < 2: return
+    if counts[-2] == 0: return
 
     diff = abs(counts[-1] - counts[-2])
     if diff / float(counts[-2]) > OUTLIER_THRESHOLD\
@@ -126,6 +127,11 @@ def read_time_series(filepath, date_first=False):
 
             # check for (possibly) bad data
             check_time_series_data(filepath, counts)
+
+            # replace 0s with the previous day's value (in case of bug)
+            for i in range(1, len(counts)):
+                if counts[i] == 0:
+                    counts[i] = counts[i-1]
 
         return counts, start_date, 24 * 3600 * 1000
     except Exception:
