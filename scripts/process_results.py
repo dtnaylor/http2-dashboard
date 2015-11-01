@@ -193,6 +193,27 @@ def outlier_report(outliers):
 
     return report
 
+def make_npn_series(conf):
+    h1_counts, h1_start, _ = read_time_series(conf['h1-1'])
+    alpn_counts, alpn_start, _ = read_time_series(conf['alpn-no-npn'])
+
+    # chop off the beginning of whichever list is longer
+    if h1_start > alpn_start:
+        alpn_counts = alpn_counts[(h1_start-alpn_start).days:]
+        npn_start = h1_start
+    else:
+        h1_counts = h1_counts[(alpn_start-h1_start).days:]
+        npn_start = alpn_start
+    
+    # write a file with npn counts
+    with open(conf['npn'], 'w') as f:
+        for i in range(len(h1_counts)):
+            npn_count = h1_counts[i] - alpn_counts[i]
+            date = npn_start + datetime.timedelta(days=i)
+            f.write('%i\t%s\n' % (npn_count, date.strftime('%Y-%m-%d')))
+
+
+
 
 
 
@@ -225,6 +246,7 @@ def support_by_date(conf, out_file):
               'spdy_2',
               'spdy_3',
               'spdy_3.1',
+              'npn',
               'alpn',
               'h2c-announce',
               'h2c-support',
@@ -552,6 +574,9 @@ def run(conf_path, outdir):
     # make output data dir if it doesn't exist
     if not os.path.exists(outdir):
         os.makedirs(outdir)
+
+    # create a time series for NPN (H1 minus alpn-no-npn)
+    make_npn_series(conf)
     
     # SUMMARY
     out_file = os.path.join(outdir, 'summary.json')

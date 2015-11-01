@@ -42,12 +42,14 @@ $.getJSON('{{ site.baseurl }}/data/support_by_date.json', function(data) {
 		'Auxiliary Protocols',
 		data,
 		[
+		'npn',
 		'alpn',
 		'alpn-no-npn',
 		'h2c-announce',
 		'h2c-support',
 		],
 		[
+		'NPN',
 		'ALPN',
 		'ALPN without NPN',
 		'H2C (Announced)',
