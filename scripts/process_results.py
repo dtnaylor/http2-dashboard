@@ -15,6 +15,7 @@ import datetime
 import json
 import pprint
 import operator
+import cPickle
 
 from collections import defaultdict
 from country_codes import country_to_code
@@ -211,6 +212,41 @@ def make_npn_series(conf):
             npn_count = h1_counts[i] - alpn_counts[i]
             date = npn_start + datetime.timedelta(days=i)
             f.write('%i\t%s\n' % (npn_count, date.strftime('%Y-%m-%d')))
+
+def process_phase3_pickle(pickle_path):
+    '''
+    INPUT: phase 3 pickle:
+            tag -> url -> date -> value
+    OUTPU: CDF Xs and Ys per tag:
+            tag -> [(x1, y1), (x2, y2), ...]
+    '''
+    latest_date_overall = '01-01-70'
+    cdf_vals_by_tag = {}
+    with open(pickle_path, 'r') as f:
+        data = cPickle.load(f)
+
+        # for each tag, find most recent value per URL
+        for tag in data:
+            latest_values = []
+            for url in data[tag]:
+                if len(data[tag][url].keys()) != 0:
+                    latest_date = sorted(data[tag][url].keys())[-1]
+                    latest_values.append(data[tag][url][latest_date])
+
+                    # save the most recent date across all tags/URLs
+                    if latest_date > latest_date_overall:
+                        latest_date_overall = latest_date
+
+            # make CDF from latest values for this tag
+            cdf_vals_by_tag[tag] = cdf(latest_values)
+
+    return latest_date_overall, cdf_vals_by_tag
+
+
+
+# FIXME hacky. need this function to unpickle phase3 pickles.
+def defaultdict_dict():
+    return defaultdict(dict)
 
 
 
@@ -446,6 +482,9 @@ def task_completion(conf, out_file):
         json.dump(data, f)
 
 def usage_and_performance(conf, out_file):
+    '''
+        NOTE: for old performance data
+    '''
 
     # initially store data in temp_data dict:
     # date -> proto -> dict:
@@ -515,8 +554,8 @@ def usage_and_performance(conf, out_file):
             
         data.append({
             'pretty_date': date.strftime('%a, %b %d, %Y'),
-            'protocols': temp_data[date].keys(),
-            'protocol_data': proto_data
+            'series': temp_data[date].keys(),
+            'series_data': proto_data
         })
 
     with open(out_file, 'w') as f:
@@ -552,6 +591,23 @@ def url_lists(conf, out_file, out_subdir):
     data['h2-announce-list'] = announce_list
     data['h2-partial-list'] = partial_list
     data['h2-true-list'] = true_list
+    
+    with open(out_file, 'w') as f:
+        json.dump(data, f)
+
+def phase3(conf, out_file):
+    data = defaultdict(list)
+    for pickle in ['plt',]:  # TODO: add other measurements
+        try:
+            latest_date, cdf_vals = process_phase3_pickle(conf[pickle])
+
+            data[pickle].append({
+                'pretty_date': latest_date,
+                'series': cdf_vals.keys(),
+                'series_data': cdf_vals
+            })
+        except:
+            logging.exception('Error processing  %s' % conf[pickle])
     
     with open(out_file, 'w') as f:
         json.dump(data, f)
@@ -609,6 +665,10 @@ def run(conf_path, outdir):
     # USAGE AND PERFORMANCE
     out_file = os.path.join(outdir, 'usage.json')
     usage_and_performance(conf, out_file)
+
+    # PHASE 3
+    out_file = os.path.join(outdir, 'phase3.json')
+    phase3(conf, out_file)
 
     # URL LISTS
     out_file = os.path.join(outdir, 'lists.json')

@@ -182,7 +182,7 @@ def process_tarball(tarball):
             logging.exception('Error extracting tarball: %s', tarball)
 
         # extract results
-        for result_file in glob.glob(tmpdir + '/res-full*.tsv'):
+        for result_file in glob.glob(tmpdir + '/res-full*'):
             process_result_file(result_file, tag, date)
 
         # delete tmp dir

@@ -71,13 +71,14 @@ function fill_date_menu(menu, data, change_callback) {
 
 /* ========================= PLOTTING ======================== */
 // Build highcharts series entries
-function build_series(series_keys, series_labels, data, data_key) {
+function build_series(series_keys, series_labels, data) {
 	series = [];
 	for (var i = 0; i < series_keys.length; i++) {
 		var series_key = series_keys[i];
 		series.push({
 			name: series_labels[series_key],
-			data: data[series_key][data_key]
+			data: data[series_key]
+			//data: data[series_key][data_key]
 		});
 	}
 
@@ -85,7 +86,8 @@ function build_series(series_keys, series_labels, data, data_key) {
 }
 
 
-function plot_cdf(container, data, title, xLabel, series_keys, series_labels, data_key, verb, value_suffix) {
+// TODO: default xMin and xMax if not provided (if null)
+function plot_cdf(container, data, title, xLabel, xMin, xMax, series_keys, series_labels, verb, value_suffix) {
 	$(function () {
 		$(container).highcharts({
 			chart: {
@@ -96,6 +98,8 @@ function plot_cdf(container, data, title, xLabel, series_keys, series_labels, da
 				text: title,
 			},
 			xAxis: {
+				min: xMin,
+				max: xMax,
 				title: {
 					text: xLabel,
 				}
@@ -128,13 +132,13 @@ function plot_cdf(container, data, title, xLabel, series_keys, series_labels, da
 				},
 			},
 
-			series: build_series(series_keys, series_labels, data['protocol_data'], data_key+'_cdf'),
+			series: build_series(series_keys, series_labels, data['series_data']),
 		});
 	});
 
 }
 
-function plot_area_hist(container, data, title, xLabel, series_keys, series_labels, data_key, value_suffix) {
+function plot_area_hist(container, data, title, xLabel, series_keys, series_labels, value_suffix) {
 	$(function () {
 		$(container).highcharts({
 			chart: {
@@ -171,7 +175,7 @@ function plot_area_hist(container, data, title, xLabel, series_keys, series_labe
 				},
 			},
 
-			series: build_series(series_keys, series_labels, data['protocol_data'], data_key+'_hist'),
+			series: build_series(series_keys, series_labels, data['series_data']),
 		});
 	});
 
