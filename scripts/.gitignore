@@ -1,3 +1,4 @@
 credentials.csv.txt
 smtp.conf
 *.log
+*.stdout

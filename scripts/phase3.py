@@ -31,7 +31,7 @@ DATE_FORMATS = ('%a_%b_%d_%Y',
 ## CONFIGURATION
 ##
 SMTP_CREDENTIALS = './smtp.conf'
-RESULT_DIR = './results'
+RESULT_DIR = '/home/varvello/HTTP-2/results'
 OUTPUT_DIR = os.path.join(RESULT_DIR, 'phase3-processed-for-site')
 PHASE3_DIRS = [
     'phase3/telefonica',
@@ -83,7 +83,7 @@ def setup_logging():
         email_handler.setLevel(logging.WARN)
         logging.getLogger('').addHandler(email_handler)
     except:
-        logging.warn('Error loading SMTP conf')
+        logging.exception('Error loading SMTP conf')
 
 def parse_date(date_str):
     for fmt in DATE_FORMATS:
@@ -168,7 +168,8 @@ def process_result_file(result_file, tag, date):
         for line in f:
             if not column_key:
                 headings = line.strip().split('\t')
-                column_key = {headings[i]: i for i in range(len(headings))}
+                #column_key = {headings[i]: i for i in range(len(headings))}
+                column_key = dict((headings[i], i) for i in range(len(headings)))
                 continue
 
             values = line.strip().split('\t')
@@ -296,12 +297,16 @@ def process_tarball(tarball):
 ## RUN
 ##
 def run():
+    logging.info('=============== PHASE 3 PROCESSING LAUNCHED ===============')
+
     # make output data dir if it doesn't exist
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
 
     for tarball in get_new_tarballs():
         process_tarball(tarball)
+    
+    logging.info('Done.')
 
 
 
