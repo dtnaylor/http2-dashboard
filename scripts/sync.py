@@ -74,7 +74,8 @@ def main():
     ##
     logging.info('Syncing results from mplane.')
     try:
-        rsync_cmd = '%s -avz --no-g --delete --exclude phase3 %s %s' %\
+        #rsync_cmd = '%s -avz --no-g --delete --exclude phase3 %s %s' %\
+        rsync_cmd = '%s -avz --no-g --delete %s %s' %\
             (RSYNC, REMOTE_RESULT_DIR, LOCAL_RESULT_DIR)
         logging.debug('Running rsync: %s', rsync_cmd)
         subprocess.check_call(rsync_cmd.split())

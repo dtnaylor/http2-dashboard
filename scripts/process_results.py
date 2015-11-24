@@ -29,6 +29,9 @@ DATE_FORMATS = ('%a_%b_%d_%Y',
 OUTLIER_THRESHOLD = 0.25
 OUTLIER_THRESHOLD_ABS = 5
 
+H2_OBJ_THRESHOLDS = (1.0, 0.9, 0.8, 0.5, 0)
+# limit which location's data we export for threshold breakdown
+THRESHOLD_DATA_TAGS = ('case-eth',)
 
 ##
 ## HELPER FUNCTIONS
@@ -180,11 +183,13 @@ def histogram(values, round_values=False):
     
     return sorted(hist.items(), key=operator.itemgetter(0))
 
-def cdf(values, round_values=False):
-    counts, x_vals = myplot.cdf_vals_from_data(values)
+def cdf(values, round_values=False, max_bins=None):
+    y_vals, x_vals = myplot.cdf_vals_from_data(values, maxbins=max_bins)
     if round_values:
-        x_vals=map(round, x_vals)
-    return zip(x_vals, counts)
+        #x_vals=map(round, x_vals)
+        x_vals = [round(x, ndigits=2) for x in x_vals]
+        y_vals = [round(y, ndigits=4) for y in y_vals]
+    return zip(x_vals, y_vals)
 
 def outlier_report(outliers):
     report = 'The following potential errors were discovered:\n'
@@ -213,34 +218,80 @@ def make_npn_series(conf):
             date = npn_start + datetime.timedelta(days=i)
             f.write('%i\t%s\n' % (npn_count, date.strftime('%Y-%m-%d')))
 
+def h2_obj_threshold_name(frac, thresholds):
+    '''
+    INPUT: 
+        frac - the fraction of objects that are H2
+        thresholds - list of thresholds
+    OUTPUT:
+        The biggest threshold less than or equal to frac, as a string
+    '''
+    thresholds = sorted(thresholds, reverse=True)
+    for thresh in thresholds:
+        if frac >= thresh:
+            return 'h2-%.1f' % thresh
+
+    # if frac was smaller than all thresholds, return frac
+    return 'h2-%.1f' % frac
+
 def process_phase3_pickle(pickle_path):
     '''
     INPUT: phase 3 pickle:
-            tag -> url -> date -> value
-    OUTPU: CDF Xs and Ys per tag:
+            tag -> url -> date -> {
+                'h2-obj-frac': <fraction of objs on H2 page loaded over H2>,
+                'h1-value': <val>,
+                'h2-value': <val>
+            }
+    OUTPUT: 
+        (1) latest date
+        (2) CDF Xs and Ys per tag:
             tag -> [(x1, y1), (x2, y2), ...]
+        (3) CDF per H2 obj threshold per tag:
+            tag -> thresh -> [ <cdf vals as above> ]
+                thresh = {h1, h2-1.0, h2-0.8, ...}
     '''
     latest_date_overall = '01-01-70'
-    cdf_vals_by_tag = {}
+    diff_cdfs_by_tag = {}
+    thresh_cdfs_by_tag = {}
     with open(pickle_path, 'r') as f:
         data = cPickle.load(f)
 
         # for each tag, find most recent value per URL
         for tag in data:
-            latest_values = []
+            latest_diffs = []
+            vals_by_thresh = defaultdict(list)  # thresh -> list of values
             for url in data[tag]:
                 if len(data[tag][url].keys()) != 0:
+                    # find most recent date for this URL
                     latest_date = sorted(data[tag][url].keys())[-1]
-                    latest_values.append(data[tag][url][latest_date])
 
                     # save the most recent date across all tags/URLs
                     if latest_date > latest_date_overall:
                         latest_date_overall = latest_date
 
-            # make CDF from latest values for this tag
-            cdf_vals_by_tag[tag] = cdf(latest_values)
+                    # save the latest difference between H1 and H2
+                    latest_diffs.append(data[tag][url][latest_date]['h1-value']-\
+                                        data[tag][url][latest_date]['h2-value'])
 
-    return latest_date_overall, cdf_vals_by_tag
+                    # save the H1 value and the H2 value for this page's
+                    # H2 object fraction threshold
+                    h2_frac = data[tag][url][latest_date]['h2-obj-frac']
+                    if h2_frac != None:
+                        h2_thresh = h2_obj_threshold_name(h2_frac, H2_OBJ_THRESHOLDS)
+                        vals_by_thresh[h2_thresh].append(\
+                            data[tag][url][latest_date]['h2-value'])
+                        vals_by_thresh['h1'].append(\
+                            data[tag][url][latest_date]['h1-value'])
+
+
+            # make CDFs 
+            diff_cdfs_by_tag[tag] = cdf(latest_diffs, max_bins=5000, round_values=True)
+            if tag in THRESHOLD_DATA_TAGS:
+                for thresh in vals_by_thresh:
+                    vals_by_thresh[thresh] = cdf(vals_by_thresh[thresh], max_bins=5000, round_values=True)
+                thresh_cdfs_by_tag[tag] = vals_by_thresh
+
+    return latest_date_overall, diff_cdfs_by_tag, thresh_cdfs_by_tag
 
 
 
@@ -372,7 +423,7 @@ def support_by_country(conf, out_file):
                     logging.exception('Error processing row in %s' % data_file)
 
         data.append({
-            'pretty_date': date.strftime('%a, %b %d, %Y'),
+            'pretty_date': date.strftime('%b %d, %Y'),
             'values': values
         })
 
@@ -406,7 +457,7 @@ def support_by_organization(conf, out_file):
                     logging.exception('Error processing row in %s' % data_file)
 
         data.append({
-            'pretty_date': date.strftime('%a, %b %d, %Y'),
+            'pretty_date': date.strftime('%b %d, %Y'),
             'values': values
         })
 
@@ -439,7 +490,7 @@ def active_workers(conf, out_file):
             'year': date.year,
             'month': date.month-1,
             'day': date.day,
-            'pretty_date': date.strftime('%a, %b %d, %Y'),
+            'pretty_date': date.strftime('%b %d, %Y'),
             'counts': time_count_pairs,
         })
     
@@ -474,7 +525,7 @@ def task_completion(conf, out_file):
             'year': date.year,
             'month': date.month-1,
             'day': date.day,
-            'pretty_date': date.strftime('%a, %b %d, %Y'),
+            'pretty_date': date.strftime('%b %d, %Y'),
             'times': histogram(completion_times),
         })
     
@@ -553,7 +604,7 @@ def usage_and_performance(conf, out_file):
             }
             
         data.append({
-            'pretty_date': date.strftime('%a, %b %d, %Y'),
+            'pretty_date': date.strftime('%b %d, %Y'),
             'series': temp_data[date].keys(),
             'series_data': proto_data
         })
@@ -597,14 +648,18 @@ def url_lists(conf, out_file, out_subdir):
 
 def phase3(conf, out_file):
     data = defaultdict(list)
-    for pickle in ['plt',]:  # TODO: add other measurements
+    for pickle in ['plt', 'num_objs', 'num_conns', 'num_domains']:
         try:
-            latest_date, cdf_vals = process_phase3_pickle(conf[pickle])
+            latest_date, diff_cdfs, thresh_cdfs =\
+                process_phase3_pickle(conf[pickle])
+
+            latest_date = datetime.datetime.strptime(latest_date, '%m-%d-%y')
+            latest_date = latest_date.strftime('%b %d, %Y')
 
             data[pickle].append({
                 'pretty_date': latest_date,
-                'series': cdf_vals.keys(),
-                'series_data': cdf_vals
+                'diff_cdfs': diff_cdfs,
+                'thresh_cdfs': thresh_cdfs,
             })
         except:
             logging.exception('Error processing  %s' % conf[pickle])

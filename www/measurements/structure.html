@@ -1,18 +1,18 @@
 ---
 layout: measurement
-title: Usage
-scripts: ['js/measurements/usage.js']
+title: Page Structure
+scripts: ['js/measurements/structure.js']
 ---
 
-<h1 class="page-header">Usage Trends
+<h1 class="page-header">Page Structure
 <sup><a style="color:inherit;"data-toggle="modal" data-target="#page-differences-modal"><span class="glyphicon glyphicon-question-sign" style="font-size:16px"></span></a></sup>
 
 	<!-- Date Menu -->
 	<div class="btn-group pull-right">
 	  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-		<span id="usage-date-display">Date</span> <span class="caret"></span>
+		<span id="structure-date-display">Date</span> <span class="caret"></span>
 	  </button>
-	  <ul class="dropdown-menu" role="menu" id="usage-date-menu">
+	  <ul class="dropdown-menu" role="menu" id="structure-date-menu">
 		<!-- to be filled in programatically on page load -->
 	  </ul>
 	</div>
@@ -38,10 +38,10 @@ scripts: ['js/measurements/usage.js']
 		<h3 class="anchor">Number of Objects</h3>
 	</a>
 	<div class="col-md-6">
-		<div id="num-obj-hist" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<div id="num-obj-diff-cdf" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	</div> <!-- col -->
 	<div class="col-md-6">
-		<div id="num-obj-cdf" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<div id="num-obj-threshold-cdf" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	</div> <!-- col -->
 </div> <!-- row -->
 
@@ -51,10 +51,10 @@ scripts: ['js/measurements/usage.js']
 		<h3 class="anchor">Number of Connections</h3>
 	</a>
 	<div class="col-md-6">
-		<div id="num-conn-hist" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<div id="num-conn-diff-cdf" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	</div> <!-- col -->
 	<div class="col-md-6">
-		<div id="num-conn-cdf" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<div id="num-conn-threshold-cdf" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	</div> <!-- col -->
 </div> <!-- row -->
 
@@ -64,10 +64,10 @@ scripts: ['js/measurements/usage.js']
 		<h3 class="anchor">Number of Domains</h3>
 	</a>
 	<div class="col-md-6">
-		<div id="num-domain-hist" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<div id="num-domain-diff-cdf" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	</div> <!-- col -->
 	<div class="col-md-6">
-		<div id="num-domain-cdf" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+		<div id="num-domain-threshold-cdf" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	</div> <!-- col -->
 </div> <!-- row -->
 	

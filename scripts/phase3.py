@@ -82,8 +82,9 @@ def parse_date(date_str):
 #    return dates
 
 def get_new_tarballs():
-    # TODO: skip tarballs we've already processed
-    skip = SKIP_TARBALLS
+    # skip bad tarballs or ones we've already processed
+    processed_tarballs = load_pickle('processed', default=[])
+    skip = SKIP_TARBALLS + processed_tarballs
     new_tarballs = []
 
     for p3_dir in PHASE3_DIRS:
@@ -99,7 +100,7 @@ def get_new_tarballs():
 def defaultdict_dict():
     return defaultdict(dict)
 
-def load_pickle(tag):
+def load_pickle(tag, default=None):
     path = os.path.join(OUTPUT_DIR, '%s.pickle' % tag)
     data = None
     if os.path.exists(path):
@@ -110,7 +111,10 @@ def load_pickle(tag):
             logging.exception('Error loading pickle: %s' % path)
 
     if data == None:
-        data = defaultdict(defaultdict_dict)
+        if default == None:
+            data = defaultdict(defaultdict_dict)
+        else:
+            data = default
 
     return data
 
@@ -124,13 +128,16 @@ def save_pickle(tag, data):
 
 
 
+
 ##
 ## DATA PROCESSING FUNCTIONS
 ##
 def process_result_file(result_file, tag, date):
     # open data files
     plt_data = load_pickle('plt')
-    # TODO: other values
+    num_objs_data = load_pickle('num_objs')
+    num_conns_data = load_pickle('num_conns')
+    num_domains_data = load_pickle('num_domains')
 
     # add new values to existing data
     with open(result_file, 'r') as f:
@@ -144,21 +151,71 @@ def process_result_file(result_file, tag, date):
             values = line.strip().split('\t')
             url = values[column_key['url']]
 
+            # When loaded over H2, what fraction of the page's objects use H2?
+            try:
+                h2_frac = float(values[column_key['num_h2_objects-delayed-h2']])/\
+                          float(values[column_key['num_objects-delayed-h2']])
+            except:
+                h2_frac = None
+
+            # TODO: condense this if same for all measurements
+
             # PLT
             try:
-                h1_plt = float(values[column_key['on_load-mean-h1']])
-                h2_plt = float(values[column_key['on_load-mean-h2']])
-                plt_data[tag][url][date] = h1_plt-h2_plt 
-            except ValueError:
-                logging.debug('PLT value error: %s, %s' % (result_file, url))
+                plt_data[tag][url][date] = {
+                    'h2-obj-frac': h2_frac,
+                    'h1-value': float(values[column_key['on_load-mean-h1']]),
+                    'h2-value': float(values[column_key['on_load-mean-h2']]),
+                }
+            except ValueError as e:
+                if e.message != 'could not convert string to float: N/A':
+                    logging.debug('PLT value error: %s, %s\n%s' % (result_file, url, e))
 
-            # TODO: other values
+            # NUM OBJECTS
+            try:
+                num_objs_data[tag][url][date] = {
+                    'h2-obj-frac': h2_frac,
+                    'h1-value': float(values[column_key['num_objects-delayed-h1']]),
+                    'h2-value': float(values[column_key['num_objects-delayed-h2']]),
+                }
+            except ValueError as e:
+                if e.message != 'could not convert string to float: N/A':
+                    logging.debug('Num objects value error: %s, %s' % (result_file, url))
+            
+            # NUM CONNECTIONS
+            try:
+                num_conns_data[tag][url][date] = {
+                    'h2-obj-frac': h2_frac,
+                    'h1-value': float(values[column_key['num_tcp_handshakes-mean-h1']]),
+                    'h2-value': float(values[column_key['num_tcp_handshakes-mean-h2']]),
+                }
+            except ValueError as e:
+                if e.message != 'could not convert string to float: N/A':
+                    logging.debug('Num conns value error: %s, %s' % (result_file, url))
+            
+            # NUM DOMAINS
+            try:
+                num_domains_data[tag][url][date] = {
+                    'h2-obj-frac': h2_frac,
+                    'h1-value': float(values[column_key['num_hosts-mean-h1']]),
+                    'h2-value': float(values[column_key['num_hosts-mean-h2']]),
+                }
+            except ValueError as e:
+                if e.message != 'could not convert string to float: N/A':
+                    logging.debug('Num domains value error: %s, %s' % (result_file, url))
+
 
     save_pickle('plt', plt_data)
+    save_pickle('num_objs', num_objs_data)
+    save_pickle('num_conns', num_conns_data)
+    save_pickle('num_domains', num_domains_data)
 
 
 def process_tarball(tarball):
     logging.info('Processing: %s' % tarball)
+
+    # if there are no problems, don't process this tarball in the future
+    all_ok = True
 
     # get date and tag (location + access network type)
     matches = re.match(r'.*/(cmu|case|telefonica)/(3G|4G)*/*res-([0-9]{2}-[0-9]{2}-[0-9]{2})-[0-9]*.tgz',\
@@ -180,10 +237,15 @@ def process_tarball(tarball):
             subprocess.check_call(tar_cmd.split())
         except:
             logging.exception('Error extracting tarball: %s', tarball)
+            all_ok = False
 
         # extract results
         for result_file in glob.glob(tmpdir + '/res-full*'):
-            process_result_file(result_file, tag, date)
+            try:
+                process_result_file(result_file, tag, date)
+            except:
+                logging.exception('Error processing result file: %s' % result_file)
+                all_ok = False
 
         # delete tmp dir
         try:
@@ -193,8 +255,13 @@ def process_tarball(tarball):
 
     else:
         logging.warn('Error parsing tarball name: %s', tarball)
+        all_ok = False
 
-    # TODO: add to processed tarballs list
+    # add to processed tarballs list
+    if all_ok:
+        processed_tarballs = load_pickle('processed', default=[])
+        processed_tarballs.append(tarball)
+        save_pickle('processed', processed_tarballs)
     
 
 

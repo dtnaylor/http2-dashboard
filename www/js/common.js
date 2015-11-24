@@ -70,6 +70,21 @@ function fill_date_menu(menu, data, change_callback) {
 
 
 /* ========================= PLOTTING ======================== */
+var tag_labels = new Array();
+tag_labels["telefonica-eth"] = "Barcelona, Spain";
+tag_labels["telefonica-3G"] = "Barcelona, Spain (3G)";
+tag_labels["telefonica-4G"] = "Barcelona, Spain (4G)";
+tag_labels["cmu-eth"] = "Pittsburgh, USA";
+tag_labels["case-eth"] = "Cleveland, USA";
+
+var thresh_labels = new Array();
+thresh_labels["h1"] = "H1";
+thresh_labels["h2-1.0"] = "H2 (100%)";
+thresh_labels["h2-0.9"] = "H2 (>90%)";
+thresh_labels["h2-0.8"] = "H2 (>80%)";
+thresh_labels["h2-0.5"] = "H2 (>50%)";
+thresh_labels["h2-0.0"] = "H2 (>0%)";
+
 // Build highcharts series entries
 function build_series(series_keys, series_labels, data) {
 	series = [];
@@ -86,7 +101,6 @@ function build_series(series_keys, series_labels, data) {
 }
 
 
-// TODO: default xMin and xMax if not provided (if null)
 function plot_cdf(container, data, title, xLabel, xMin, xMax, series_keys, series_labels, verb, value_suffix) {
 	$(function () {
 		$(container).highcharts({
@@ -132,7 +146,7 @@ function plot_cdf(container, data, title, xLabel, xMin, xMax, series_keys, serie
 				},
 			},
 
-			series: build_series(series_keys, series_labels, data['series_data']),
+			series: build_series(series_keys, series_labels, data),
 		});
 	});
 
