@@ -25,6 +25,9 @@ REMOTE_RESULT_DIR = 'mplane:/home/varvello/HTTP-2/results'
 LOCAL_RESULT_DIR = '.'
 SMTP_CREDENTIALS = './smtp.conf'
 
+# FIXME hacky. need this function to unpickle phase3 pickles.
+def defaultdict_dict():
+    return defaultdict(dict)
 
 def setup_logging():
     logfmt = "%(levelname) -10s %(asctime)s %(module)s:%(lineno) -7s %(message)s"

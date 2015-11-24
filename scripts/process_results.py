@@ -358,6 +358,7 @@ def support_by_date(conf, out_file):
 
 def support_by_server(conf, out_file):
     series = glob.glob('%s/*' % conf['server_support_prefix'])
+    series.remove(os.path.join(conf['server_support_prefix'], 'fixEntry.sh'))
     
     # series name -> key (counts, start, interval) -> value
     time_series = defaultdict(dict)
