@@ -126,6 +126,11 @@ def read_time_series(filepath, date_first=False):
                     if days_since_last_point > 1:
                         counts += [counts[-1]]*(days_since_last_point-1)
 
+                    # if dates are out of order, skip dates the should have
+                    # come before the latest_date (TODO: something better?)
+                    if days_since_last_point < 0:
+                        continue
+
                 counts.append(count)
                 last_date = date
 
