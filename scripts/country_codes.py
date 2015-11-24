@@ -51,6 +51,7 @@ country_to_code = {
 	"Cape Verde": "CV",
 	"Cayman Islands": "KY",
 	"Central African Republic": "CF",
+	"Central African": "CF",
 	"Chad": "TD",
 	"Chile": "CL",
 	"China": "CN",
