@@ -18,6 +18,7 @@ import shutil
 import subprocess
 import cPickle
 from collections import defaultdict
+from logging import handlers
 
 sys.path.append('./myplot')
 import myplot
@@ -29,6 +30,7 @@ DATE_FORMATS = ('%a_%b_%d_%Y',
 ##
 ## CONFIGURATION
 ##
+SMTP_CREDENTIALS = './smtp.conf'
 RESULT_DIR = './results'
 OUTPUT_DIR = os.path.join(RESULT_DIR, 'phase3-processed-for-site')
 PHASE3_DIRS = [
@@ -50,17 +52,38 @@ SKIP_TARBALLS = [
 ## HELPER FUNCTIONS
 ##
 def setup_logging():
+    logfmt = "%(levelname) -10s %(asctime)s %(module)s:%(lineno) -7s %(message)s"
     if args.quiet:
         level = logging.WARNING
     elif args.verbose:
         level = logging.DEBUG
     else:
         level = logging.INFO
-    config = {
-        'format' : "%(levelname) -10s %(asctime)s %(module)s:%(lineno) -7s %(message)s",
-        'level' : level
-    }
-    logging.basicConfig(**config)
+
+    logging.getLogger('').setLevel(level)
+
+    # log to file (capped at 10 MB)
+    file_handler = handlers.RotatingFileHandler('phase3.log',\
+        maxBytes=10*1024*1024, backupCount=3)
+    file_handler.setFormatter(logging.Formatter(fmt=logfmt))
+    file_handler.setLevel(level)
+    logging.getLogger('').addHandler(file_handler)
+
+    # send errors by email
+    try:
+        smtp_conf = None
+        with open(SMTP_CREDENTIALS, 'r') as f:
+            smtp_conf = eval(f.read())
+
+        email_handler = handlers.SMTPHandler(\
+            smtp_conf['server'], 'varvello.research@gmail.com',\
+            ['dtbn07@gmail.com'], 'HTTP/2 Dashboard Error',\
+            credentials=smtp_conf['credentials'], secure=())
+        email_handler.setFormatter(logging.Formatter(fmt=logfmt))
+        email_handler.setLevel(logging.WARN)
+        logging.getLogger('').addHandler(email_handler)
+    except:
+        logging.warn('Error loading SMTP conf')
 
 def parse_date(date_str):
     for fmt in DATE_FORMATS:
