@@ -55,8 +55,9 @@ def setup_logging():
                 smtp_conf = eval(f.read())
 
             email_handler = handlers.SMTPHandler(\
-                smtp_conf['server'], 'dtbn07@gmail.com',\
-                ['dtbn07@gmail.com'], 'HTTP/2 Dashboard Error',\
+                smtp_conf['server'], 'varvello.research@gmail.com',\
+                ['dtbn07@gmail.com', 'matteo.varvello@telefonica.com'],\
+                'HTTP/2 Dashboard Error',\
                 credentials=smtp_conf['credentials'], secure=())
             email_handler.setFormatter(logging.Formatter(fmt=logfmt))
             email_handler.setLevel(logging.WARN)
