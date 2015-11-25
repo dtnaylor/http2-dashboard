@@ -130,7 +130,8 @@ def read_time_series(filepath, date_first=False):
                     # if dates are out of order, skip dates the should have
                     # come before the latest_date (TODO: something better?)
                     if days_since_last_point < 0:
-                        outliers.append('Date out of order: %s  (%s)' % (date, filepath))
+                        outliers.append('Date out of order: %s  (%s)' %\
+                            (date.strftime('%Y-%m-%d'), filepath))
                         continue
 
                 counts.append(count)
