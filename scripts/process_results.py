@@ -23,8 +23,10 @@ from country_codes import country_to_code
 sys.path.append('./myplot')
 import myplot
 
-DATE_FORMATS = ('%a_%b_%d_%Y',
-                '%Y-%m-%d',                
+DATE_FORMATS = (
+    '%Y-%m-%d',                
+    '%a_%b_%d_%Y',
+    '%a_%b_%-d_%Y', # dash for no leading 0 on day
 )
 OUTLIER_THRESHOLD = 0.25
 OUTLIER_THRESHOLD_ABS = 5
@@ -70,6 +72,13 @@ def parse_date(date_str):
             return date  # if we parsed date successfully, stop tyring more formats
     else:  # no format succeeded
         raise ValueError('Error parsing date: %s' % date_str)
+
+def file_for_date(prefix, date):
+    for fmt in DATE_FORMATS:
+        file_path = prefix + date.strftime(fmt)
+        if os.path.exists(file_path):
+            return file_path
+    return None
 
 def check_time_series_data(data_file, counts):
     global outliers
@@ -150,11 +159,14 @@ def read_time_series(filepath, date_first=False):
         logging.exception('Error reading time series: %s' % filepath)
         return None, None, None
 
-def dates_for_prefix(prefix, date_format='%Y-%m-%d'):
-    dates = glob.glob(prefix + '*')
-    dates = map(lambda x: 
-        datetime.datetime.strptime(x.replace(prefix, ''), date_format)
-        , dates)
+def dates_for_prefix(prefix):
+    files = glob.glob(prefix + '*')
+    dates = []
+    for f in files:
+        try:
+            dates.append(parse_date(f.replace(prefix, '')))
+        except:
+            logging.exception('Error parsing file name: %s' % f)
     dates = sorted(dates, reverse=True)
     return dates
 
@@ -408,26 +420,47 @@ def support_by_country(conf, out_file):
 
     data = []
     for date in dates_to_show(dates):
-        date_file_suffix = date.strftime('%Y-%m-%d')  # dash for no leading 0 on day
-        data_file = conf['country_support_prefix'] + date_file_suffix
+        data_file = file_for_date(conf['country_support_prefix'], date)
+        if data_file == None: continue
 
         values = []
         with open(data_file, 'r') as f:
             for line in f:
-                country, count = line.strip().split()
-                country = country.replace('-', ' ')
+                line = line.strip()
                 try:
+                    # there could be spaces in the country name
+                    fields = line.split()
+                    if len(fields) > 2:
+                        country, count = line.split('\t')
+                    elif len(fields) == 1:
+                        continue # empty name
+                    else:
+                        country, count = fields
+                    country = country.replace('-', ' ')
+                except ValueError:
+                    outliers.append('Invalid country count: %s  (%s)' % (line, data_file))
+                except:
+                    logging.exception('Error processing row in %s' % data_file)
+
+                try:
+                    # country could already be a country code, or could be full name
+                    if re.match(r'[A-Z]{2}', country):
+                        country_code = country
+                    else:
+                        country_code = country_to_code[country]
+                    
                     values.append({
                         'name': country,
-                        'code': country_to_code[country],
+                        'code': country_code,
                         'value': int(count)
                     })
                 except KeyError:
-                    if country != 'NA':
+                    if country not in ['NA', 'NaN', 'A1', 'A2', ')', 'found', ') )']:
                         logging.warn('Unknown country: %s  (%s)' % (country, data_file))
                 except ValueError:
                     if count not in ('NA', 'NaN'):
                         logging.warn('Invalid count: %s  (%s)' % (count, data_file))
+                        logging.exception('blah')
                 except:
                     logging.exception('Error processing row in %s' % data_file)
 
@@ -446,14 +479,29 @@ def support_by_organization(conf, out_file):
 
     data = []
     for date in dates_to_show(dates):
-        date_file_suffix = date.strftime('%Y-%m-%d')  # dash for no leading 0 on day
-        data_file = conf['organization_support_prefix'] + date_file_suffix
+        data_file = file_for_date(conf['organization_support_prefix'], date)
+        if data_file == None: continue
 
         values = []
         with open(data_file, 'r') as f:
             for line in f:
-                org, count = line.strip().split()
-                org = org.replace('-', ' ')
+                line = line.strip()
+
+                try:
+                    # there could be spaces in the org name
+                    fields = line.split()
+                    if len(fields) > 2:
+                        org, count = line.split('\t')
+                    elif len(fields) == 1:
+                        continue  # empty name
+                    else:
+                        org, count = fields
+                    org = org.replace('-', ' ')
+                except ValueError:
+                    outliers.append('Invalid org count: %s  (%s)' % (line, data_file))
+                except:
+                    logging.exception('Error processing row in %s' % data_file)
+
                 try:
                     values.append({
                         'name': org,
@@ -712,11 +760,11 @@ def run(conf_path, outdir):
 
     # SUPPORT BY COUNTRY
     out_file = os.path.join(outdir, 'support_by_country.json')
-    #support_by_country(conf, out_file)
+    support_by_country(conf, out_file)
     
     # SUPPORT BY ORGANIZATION
     out_file = os.path.join(outdir, 'support_by_organization.json')
-    #support_by_organization(conf, out_file)
+    support_by_organization(conf, out_file)
 
     # ACTIVE WORKERS
     out_file = os.path.join(outdir, 'active_workers.json')
