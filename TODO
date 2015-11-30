@@ -4,3 +4,5 @@
 - label support type for country/org
 - document phase3 data structures
 - historical phase3 plots?
+- explain the pool of sites we crawl
+- explain perf/usage plots better?
