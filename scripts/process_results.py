@@ -350,6 +350,7 @@ def support_by_date(conf, out_file):
               'h2_15_advertised_support_by_date',
               'h2_16_advertised_support_by_date',
               'h2_17_advertised_support_by_date',
+              'h2_advertised_support_by_date',
               'spdy_2',
               'spdy_3',
               'spdy_3.1',

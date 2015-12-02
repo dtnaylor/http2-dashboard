@@ -31,9 +31,11 @@ $.getJSON('{{ site.baseurl }}/data/support_by_date.json', function(data) {
 		'h2_14_advertised_support_by_date',
 		'h2_15_advertised_support_by_date',
 		'h2_16_advertised_support_by_date',
-		'h2_17_advertised_support_by_date'],
+		'h2_17_advertised_support_by_date',
+		//'h2_advertised_support_by_date',
+		],
 		['SPDY 2', 'SPDY 3', 'SPDY 3.1',
-		 'H2 Draft 12', 'H2 Draft 14', 'H2 Draft 15', 'H2 Draft 16', 'H2 Draft 17'],
+		 'H2 Draft 12', 'H2 Draft 14', 'H2 Draft 15', 'H2 Draft 16', 'H2 Draft 17'], //, 'H2'],
 		 null,
 		 false
 		);
