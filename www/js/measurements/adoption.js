@@ -95,7 +95,7 @@ function set_country_crawl_date(index) {
 
 		// load data into map
 		plot_map('#actual-support-map',
-			'Actual Support by Country',
+			'Breakdown by Country (True Support)',
 			data[index]);
 	});
 }
