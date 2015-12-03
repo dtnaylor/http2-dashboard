@@ -203,6 +203,7 @@ function plot_map(container, title, data) {
 
 			mapNavigation: {
 				enabled: true,
+				enableMouseWheelZoom: false,
 				buttonOptions: {
 					verticalAlign: 'bottom'
 				}
