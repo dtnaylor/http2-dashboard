@@ -80,6 +80,112 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 	<div class="col-md-12">
 		<div id="advertised-vs-actual-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	</div> <!-- col -->
+
+	<!-- Notable Events -->
+	<div class="col-md-8 col-md-offset-2">
+		<div class="panel panel-default">
+		  <!-- Default panel contents -->
+		  <div class="panel-heading">
+			<h3 class="panel-title">Notable Events</h3>
+		  </div>
+		  <!-- <div class="panel-body">
+			<p>...</p>
+		  </div> -->
+
+		  <!-- List group -->
+		  <ul class="list-group">
+			<!-- CloudFlare -->
+			<li class="list-group-item"><i>2015-12-03</i> &nbsp;&nbsp; <b>CloudFlare enables HTTP/2</b>
+				<a style="float: right;" data-toggle="collapse" href="#CloudFlareEnablesH2" aria-expanded="false" aria-controls="CloudFlareEnablesH2">more...</a>
+				<div class="collapse" id="CloudFlareEnablesH2">
+				  <div class="panel-body">
+				  CloudFlare enables HTTP/2 for all its customers using a
+				  modified version of nginx, cloudflare-nginx.<br/><br/>
+				  <a href="https://blog.cloudflare.com/introducing-http2/">https://blog.cloudflare.com/introducing-http2/</a>
+				  </div>
+				</div>
+			</li>
+			
+			<!-- WordPress -->
+			<li class="list-group-item"><i>2015-10-03</i> &nbsp;&nbsp; <b>WordPress enables HTTP/2</b>
+				<a style="float: right;" data-toggle="collapse" href="#WordPressEnablesH2" aria-expanded="false" aria-controls="WordPressEnablesH2">more...</a>
+				<div class="collapse" id="WordPressEnablesH2">
+				  <div class="panel-body">
+				  WordPress updates to nginx 1.9.5, which introduces HTTP/2
+				  support. nginx support for HTTP/2 was sponsored by Dropbox
+				  and Automattic, the creators of WordPress.<br/><br/>
+				  <a href="http://nginx.org/en/CHANGES">http://nginx.org/en/CHANGES</a>
+				  </div>
+				</div>
+			</li>
+			
+			<!-- List Update -->
+			<li class="list-group-item"><i>2015-09-11</i> &nbsp;&nbsp; <b>We expand list of monitored sites</b>
+				<a style="float: right;" data-toggle="collapse" href="#ExpandList2" aria-expanded="false" aria-controls="ExpandList2">more...</a>
+				<div class="collapse" id="ExpandList2">
+				  <div class="panel-body">
+					We periodically refresh the list of sites we monitor with
+					the most recent Alexa top 1 million list. We do not remove
+					old sites that no longer appear on the Alexa list, so our
+					list grows when we do this.
+				  </div>
+				</div>
+			</li>
+			
+			<!-- List Update -->
+			<li class="list-group-item"><i>2015-08-06</i> &nbsp;&nbsp; <b>We expand list of monitored sites</b>
+				<a style="float: right;" data-toggle="collapse" href="#ExpandList1" aria-expanded="false" aria-controls="ExpandList1">more...</a>
+				<div class="collapse" id="ExpandList1">
+				  <div class="panel-body">
+					We periodically refresh the list of sites we monitor with
+					the most recent Alexa top 1 million list. We do not remove
+					old sites that no longer appear on the Alexa list, so our
+					list grows when we do this.
+				  </div>
+				</div>
+			</li>
+			
+			<!-- HawkHost -->
+			<li class="list-group-item"><i>2015-06</i> &nbsp;&nbsp; <b>Hawk Host enables HTTP/2</b>
+				<a style="float: right;" data-toggle="collapse" href="#HawkHostEnablesH2" aria-expanded="false" aria-controls="HawkHostEnablesH2">more...</a>
+				<div class="collapse" id="HawkHostEnablesH2">
+				  <div class="panel-body">
+					The number of partial support websites&mdash;though they
+					are mostly error pages&mdash;triples from 600 to 2,000 when Hawk Host, a
+					virtual web hosting provider, updates its servers to the latest version of
+					LiteSpeed, which supports H2.<br/><br/>
+					<a href="http://blog.hawkhost.com/2015/07/13/http2-more-now-available-at-hawk-host-via-litespeed-5-0/">
+					http://blog.hawkhost.com/2015/07/13/http2-more-now-available-at-hawk-host-via-litespeed-5-0/</a>
+				  </div>
+				</div>
+			</li>
+			
+			<!-- Google Re-enables H2 -->
+			<li class="list-group-item"><i>2015-01-10</i> &nbsp;&nbsp; <b>Google re-enables HTTP/2</b>
+				<a style="float: right;" data-toggle="collapse" href="#GoogleReenablesH2" aria-expanded="false" aria-controls="GoogleReenablesH2">more...</a>
+				<div class="collapse" id="GoogleReenablesH2">
+				  <div class="panel-body">
+					Google re-enables HTTP/2 after the SDCH compression issue is patched.
+				  </div>
+				</div>
+			</li>
+			
+			<!-- Google Disables H2 -->
+			<li class="list-group-item"><i>2014-12-18</i> &nbsp;&nbsp; <b>Google disables HTTP/2</b>
+				<a style="float: right;" data-toggle="collapse" href="#GoogleDisablesH2" aria-expanded="false" aria-controls="GoogleDisablesH2">more...</a>
+				<div class="collapse" id="GoogleDisablesH2">
+				  <div class="panel-body">
+					Google, the primary adopter of H2 at this time, disabled H2
+					support on their servers due to an issue with SDCH compressed
+					content in Chromium. It takes three weeks for the problem to be fixed. <br/><br/>
+					<a href="https://lists.w3.org/Archives/Public/ietf-http-wg/2014OctDec/0960.html">
+					https://lists.w3.org/Archives/Public/ietf-http-wg/2014OctDec/0960.html</a>
+				  </div>
+				</div>
+			</li>
+		  </ul>
+		</div>  <!-- panel (notable events) -->
+	</div> <!-- col -->
 </div> <!-- row -->
 <div class="row" style="margin-left: 10px; margin-bottom: 20px">
 	<div class="col-md-12">
