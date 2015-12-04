@@ -19,24 +19,5 @@ scripts: ['js/measurements/overview.js']
 		</div>
 	</div> <!-- col -->
 </div> <!-- row -->
-
-<div class="row">
-	<div class="col-md-8 col-md-offset-2">
-		<table align="center" style="border-spacing: 20px 15px; border-collapse: separate;">
-			<tr>
-				<td align="right"><span class="label label-warning" style="font-size: 21px">Announced Support</span></td>
-				<td><p id="announced-text" style="font-size: 21px; font-weight: 200; padding-top: 7px;"></p></td>
-			</tr>
-			<tr>
-				<td align="right"><span class="label label-info" style="font-size: 21px">Partial Support</span></td>
-				<td><p id="partial-text" style="font-size: 21px; font-weight: 200; padding-top: 7px;"></p></td>
-			</tr>
-			<tr>
-				<td align="right"><span class="label label-success" style="font-size: 21px">True Support</span></td>
-				<td><p id="true-text" style="font-size: 21px; font-weight: 200; padding-top: 7px;"></p></td>
-			</tr>
-		</table>
-
-		<div align="center"><p><a class="subtle" href="{{ site.baseurl }}/measurements/adoption.html">What does this mean?</a></p></div>
-	</div> <!-- col -->
-</div> <!-- row -->
+	
+{% include counts.html %}

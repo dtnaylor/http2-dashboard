@@ -8,7 +8,7 @@ scripts: ['js/index.js']
 	<!-- LOGO -->
 	<div class="row" style="margin-top: 50px;">
 		<div class="col-md-12" align="center">
-			<img src="{{ site.baseurl }}/img/logo_text.svg" height="200px">
+			<img src="{{ site.baseurl }}/img/logo_text.svg" style="max-height:200px; width:100%;">
   			<p style="padding-top: 5px; font-size: 18pt; font-weight: 200;">Monitoring the adoption and performance of HTTP/2 on the Web.</p>
 		</div> <!-- col -->
 	</div> <!-- row -->
@@ -30,27 +30,8 @@ scripts: ['js/index.js']
 			<p><a class="btn btn-default" href="{{ site.baseurl }}/platform/overview.html" role="button">View details »</a></p>
 		</div> <!-- col -->
 	</div> <!-- row -->
-	
-	<!-- COUNTS -->
-	<div class="row" style="margin-top: 70px; margin-bottom: 20px">
-		<div class="col-md-8 col-md-offset-2">
-			<table align="center" style="border-spacing: 20px 15px; border-collapse: separate;">
-				<tr>
-					<td align="right"><span class="label label-warning" style="font-size: 21px">Announced Support</span></td>
-					<td><p id="announced-text" style="font-size: 21px; font-weight: 200; padding-top: 7px;"></p></td>
-				</tr>
-				<tr>
-					<td align="right"><span class="label label-info" style="font-size: 21px">Partial Support</span></td>
-					<td><p id="partial-text" style="font-size: 21px; font-weight: 200; padding-top: 7px;"></p></td>
-				</tr>
-				<tr>
-					<td align="right"><span class="label label-success" style="font-size: 21px">True Support</span></td>
-					<td><p id="true-text" style="font-size: 21px; font-weight: 200; padding-top: 7px;"></p></td>
-				</tr>
-			</table>
 
-		</div> <!-- col -->
-	</div> <!-- row -->
+	{% include counts.html %}
 
 	{% include logos.html %}
 </div> <!-- container -->

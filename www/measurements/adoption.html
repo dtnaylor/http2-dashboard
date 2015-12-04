@@ -7,8 +7,8 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 <h1 class="page-header">HTTP/2 Adoption</h1>
 
 
-<!-- SUPPORT DEFINITIONS -->
-<div class="row" style="margin-left: 10px; margin-bottom: 20px">
+<!-- SUPPORT DEFINITIONS (Desktop) -->
+<div class="row hidden-xs" style="margin-left: 10px; margin-bottom: 20px">
 	<div class="col-md-12">
 		<div align="center">
 			<table style="border-spacing: 50px 15px; border-collapse: separate;">
@@ -57,6 +57,52 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 				</tr>
 			</table>
 		</div>
+	</div>
+</div> <!-- row -->
+
+<!-- SUPPORT DEFINITIONS (Mobile) -->
+<div class="row visible-xs" style="margin-left: 10px; margin-bottom: 20px">
+	<div class="col-md-4">
+		<span style="font-size: x-large;" class="label label-warning">Announced Support</span>
+
+		<p style="padding-top: 20px;">Sites indicate which application-layer protocols they
+		support using NPN/ALPN. If a site indicates HTTP/2, we
+		call this <b>announced support</b>.  <a href="#"
+		data-toggle="modal"
+		data-target="#announced-support-modal">more...</a></p>
+
+		<p style="padding-bottom:30px;"><a id="h2-announce-list-link" href="#"
+		class="h2-announce"><span class="glyphicon
+		glyphicon-arrow-down" style="padding-right: 5px;"
+		aria-hidden="true"></span>Download URL list</a>
+	</div>
+	
+	<div class="col-md-4">
+		<span style="font-size: x-large;" class="label label-info">Partial Support</span>
+
+		<p style="padding-top: 20px;"> Some sites that announce HTTP/2 support immediately
+		downgrade the connection to HTTP 1.1 if a client makes a
+		request using HTTP/2. If a site responds using HTTP/2, even
+		just to return an error page or redirect, we classify this
+		as <b>partial support</b>.</p>
+
+		<p style="padding-bottom: 30px;"><a id="h2-partial-list-link" href="#"
+		class="h2-partial"><span class="glyphicon
+		glyphicon-arrow-down" style="padding-right: 5px;"
+		aria-hidden="true"></span>Download URL list</a>
+	</div>
+
+	<div class="col-md-4">
+		<span style="font-size: x-large;" class="label label-success">True Support</span>
+
+		<p style="padding-top: 20px;"> If a site actually serves page content using HTTP/2,
+		even if some embedded objects are still served over HTTP
+		1.1, we call this <b>true support</b>.  </p> 
+		
+		<p><a id="h2-true-list-link" href="#" class="h2-true"><span
+		class="glyphicon glyphicon-arrow-down"
+		style="padding-right: 5px;"
+		aria-hidden="true"></span>Download URL list</a>
 	</div>
 </div> <!-- row -->
 
@@ -242,7 +288,7 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 
 <div class="row" style="margin-left: 10px; margin-bottom: 40px">
 	<div class="col-md-12">
-		<div id="actual-support-map" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
+		<div id="actual-support-map" style="min-width: 310px; max-height: 500px; margin: 0 auto"></div>
 	</div> <!-- col -->
 </div> <!-- row -->
 
