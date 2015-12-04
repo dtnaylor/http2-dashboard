@@ -19,8 +19,8 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 				</tr>
 				<tr>
 					<td style="max-width: 300px; vertical-align: top;">
-					<p>Sites advertise which application-layer protocols they
-					support using NPN/ALPN. If a site advertises HTTP/2, we
+					<p>Sites indicate which application-layer protocols they
+					support using NPN/ALPN. If a site indicates HTTP/2, we
 					call this <b>announced support</b>.  <a href="#"
 					data-toggle="modal"
 					data-target="#announced-support-modal">more...</a></p>
@@ -214,12 +214,12 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/m
 		<b>Application-Layer Protocol Negotiation (ALPN)</b>. NPN/ALPN allows
 		application endpoints to negotiate which protocol to use over TLS.</p>
 		
-		<p>Servers use NPN/ALPN to announce which application protocols they
-		support; we call this <b>announced support</b>. In many cases, however,
-		if a client makes a request to a server announcing HTTP/2 support, the
-		server downgrades the connection to HTTP 1.1. If, on the other hand,
-		the server responds using HTTP/2, we call this <b>partial support</b>
-		or <b>true support</b>.</p>
+		<p>Servers use NPN/ALPN to indicate to clients which application
+		protocols they support; we call this <b>announced support</b>. In many
+		cases, however, if a client makes a request to a server announcing
+		HTTP/2 support, the server downgrades the connection to HTTP 1.1. If,
+		on the other hand, the server responds using HTTP/2, we call this
+		<b>partial support</b> or <b>true support</b>.</p>
 	  </div>
 	</div>
   </div>
