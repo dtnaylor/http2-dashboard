@@ -1,5 +1,23 @@
 ---
 ---
+var proto_labels = new Array();
+proto_labels["advertised_support_by_date"] = "Announced Support";
+proto_labels["partial_support_by_date"] = "Partial Support";
+proto_labels["true_support_by_date"] = "True Support";
+proto_labels["spdy_2"] = "SPDY 2";
+proto_labels["spdy_3"] = "SPDY 3";
+proto_labels["spdy_3.1"] = "SPDY 3.1";
+proto_labels["h2_advertised_support_by_date"] = "H2";
+proto_labels["h2_14_advertised_support_by_date"] = "H2 Draft 14";
+proto_labels["h2_15_advertised_support_by_date"] = "H2 Draft 15";
+proto_labels["h2_17_advertised_support_by_date"] = "H2 Draft 17";
+proto_labels["npn"] = "NPN";
+proto_labels["alpn"] = "ALPN";
+proto_labels["alpn-no-npn"] = "ALPN without NPN";
+proto_labels["h2c-announce"] = "H2C (Announced)";
+proto_labels["h2c-support"] = "H2C (True)";
+
+
 $.getJSON('{{ site.baseurl }}/data/lists.json', function(data) {
 	var announce_link = document.getElementById('h2-announce-list-link');
 	announce_link.href = '{{ site.baseurl }}/' + data['h2-announce-list'];
@@ -15,27 +33,16 @@ $.getJSON('{{ site.baseurl }}/data/support_by_date.json', function(data) {
 	plot_time_series('#advertised-vs-actual-chart',
 		'Announced, Partial, and True Support',
 		data,
-		['advertised_support_by_date', 'partial_support_by_date', 'true_support_by_date'],
-		['Announced Support', 'Partial Support', 'True Support'],
+		data['support_series_keys'],
+		proto_labels,
 		['#F0AD4E', '#5BC0DE', '#5CB85C'],
 		false);
 	
 	plot_time_series('#draft-versions-chart',
 		'Breakdown by Protocol Version (Announced Support)',
 		data,
-		[
-		'spdy_2',
-		'spdy_3',
-		'spdy_3.1',
-		'h2_12_advertised_support_by_date',
-		'h2_14_advertised_support_by_date',
-		'h2_15_advertised_support_by_date',
-		'h2_16_advertised_support_by_date',
-		'h2_17_advertised_support_by_date',
-		'h2_advertised_support_by_date',
-		],
-		['SPDY 2', 'SPDY 3', 'SPDY 3.1',
-		 'H2 Draft 12', 'H2 Draft 14', 'H2 Draft 15', 'H2 Draft 16', 'H2 Draft 17', 'H2'],
+		data['protocol_series_keys'],
+		proto_labels,
 		 null,
 		 false
 		);
@@ -43,20 +50,8 @@ $.getJSON('{{ site.baseurl }}/data/support_by_date.json', function(data) {
 	plot_time_series('#aux-protocols-chart',
 		'Auxiliary Protocols',
 		data,
-		[
-		'npn',
-		'alpn',
-		'alpn-no-npn',
-		'h2c-announce',
-		'h2c-support',
-		],
-		[
-		'NPN',
-		'ALPN',
-		'ALPN without NPN',
-		'H2C (Announced)',
-		'H2C (True)',
-		],
+		data['aux_series_keys'],
+		proto_labels,
 		 null,
 		 true
 		);
@@ -132,9 +127,12 @@ function plot_time_series(container, title, data, series_keys, series_labels, se
 	series = [];
 	for (var i = 0; i < series_keys.length; i++) {
 		var key = series_keys[i];
+		var name = key;
+		if (key in series_labels)
+			name = series_labels[key];
 		series.push({
 			type: 'line',
-			name: series_labels[i],
+			name: name,
 			pointInterval: data[key]['interval'],
 			pointStart: Date.UTC(data[key]['start_year'],
 								 data[key]['start_month'], 
@@ -166,6 +164,7 @@ function plot_time_series(container, title, data, series_keys, series_labels, se
 			},
 			xAxis: {
 				type: 'datetime',
+				min: new Date('2014/11/01').getTime(),
 				minRange: 14 * 24 * 3600000 // fourteen days
 			},
 			yAxis: {

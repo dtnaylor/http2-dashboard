@@ -342,24 +342,28 @@ def summary(conf, out_file):
         json.dump(data, f)
 
 def support_by_date(conf, out_file):
-    series = ['advertised_support_by_date',
-              'partial_support_by_date',
-              'true_support_by_date',
-              'h2_12_advertised_support_by_date',
-              'h2_14_advertised_support_by_date',
-              'h2_15_advertised_support_by_date',
-              'h2_16_advertised_support_by_date',
-              'h2_17_advertised_support_by_date',
-              'h2_advertised_support_by_date',
-              'spdy_2',
-              'spdy_3',
-              'spdy_3.1',
-              'npn',
-              'alpn',
-              'h2c-announce',
-              'h2c-support',
-              'alpn-no-npn',
-             ]
+    support_series = [
+      'advertised_support_by_date',
+      'partial_support_by_date',
+      'true_support_by_date'
+    ]
+    protocol_series = [
+      'h2_14_advertised_support_by_date',
+      'h2_15_advertised_support_by_date',
+      'h2_17_advertised_support_by_date',
+      'h2_advertised_support_by_date',
+      'spdy_2',
+      'spdy_3',
+      'spdy_3.1'
+    ]
+    aux_series = [
+      'npn',
+      'alpn',
+      'h2c-announce',
+      'h2c-support',
+      'alpn-no-npn'
+    ]
+    series = support_series + protocol_series + aux_series
     
     # series name -> key (counts, start, interval) -> value
     data = defaultdict(dict)
@@ -373,6 +377,14 @@ def support_by_date(conf, out_file):
         data[series_name]['start_month'] = start_date.month-1
         data[series_name]['start_day'] = start_date.day
         data[series_name]['interval'] = interval
+
+    # sort series by count
+    support_series = sorted(support_series, reverse=True, key=lambda x: data[x]['counts'][-1])
+    protocol_series = sorted(protocol_series, reverse=True, key=lambda x: data[x]['counts'][-1])
+    aux_series = sorted(aux_series, reverse=True, key=lambda x: data[x]['counts'][-1])
+    data['support_series_keys'] = support_series
+    data['protocol_series_keys'] = protocol_series
+    data['aux_series_keys'] = aux_series
 
     with open(out_file, 'w') as f:
         json.dump(data, f)
