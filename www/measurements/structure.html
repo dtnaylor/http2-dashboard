@@ -5,7 +5,6 @@ scripts: ['js/measurements/structure.js']
 ---
 
 <h1 class="page-header">Page Structure
-<sup><a style="color:inherit;"data-toggle="modal" data-target="#page-differences-modal"><span class="glyphicon glyphicon-question-sign" style="font-size:16px"></span></a></sup>
 
 	<!-- Date Menu -->
 	<div class="btn-group pull-right">
@@ -19,18 +18,29 @@ scripts: ['js/measurements/structure.js']
 </h1>
 
 
-<!-- TABLE OF CONTENTS -->
-<div class="row" style="margin-left: 10px; margin-bottom: 20px">
-	<div class="col-md-12">
-		<div align="center">
-			Jump:&nbsp;
-			<a href="#objects">Objects</a>&nbsp;&nbsp;&bull;&nbsp;
-			<a href="#connections">Connections</a>&nbsp;&nbsp;&bull;&nbsp;
-			<a href="#domains">Domains</a>
+<!-- INFO -->
+<div class="row" style="margin-left: 10px">
+	<div class="col-md-4 col-md-offset-2"> 
+		<div class="panel panel-default" style="margin-bottom:0px">
+		  <div class="panel-body">
+				<a data-toggle="modal" data-target="#page-differences-modal" href="#page-differences-modal">What is page structure?</a>
+		  </div>
 		</div>
-	</div>
+	</div> <!-- col -->
+	
+	<div class="col-md-4"> 
+		<div class="panel panel-default" style="margin-bottom:0px">
+		  <div class="panel-body">
+				<a data-toggle="modal" data-target="#plot-help-modal" href="#plot-help-modal">Reading a CDF</a>
+		  </div>
+		</div>
+	</div> <!-- col -->
 </div> <!-- row -->
 
+
+
+<!-- TABLE OF CONTENTS -->
+{% include structure_toc.html %}
 
 <!-- NUM OBJECTS -->
 <div class="row" style="margin-left: 10px; margin-bottom: 40px">
@@ -45,6 +55,9 @@ scripts: ['js/measurements/structure.js']
 	</div> <!-- col -->
 </div> <!-- row -->
 
+<!-- TABLE OF CONTENTS -->
+{% include structure_toc.html %}
+
 <!-- NUM CONNECTIONS -->
 <div class="row" style="margin-left: 10px; margin-bottom: 40px">
 	<a name="connections" class="anchor-wrapper">
@@ -57,6 +70,9 @@ scripts: ['js/measurements/structure.js']
 		<div id="num-conn-threshold-cdf" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	</div> <!-- col -->
 </div> <!-- row -->
+
+<!-- TABLE OF CONTENTS -->
+{% include structure_toc.html %}
 
 <!-- NUM DOMAINS -->
 <div class="row" style="margin-left: 10px; margin-bottom: 40px">
@@ -81,7 +97,7 @@ scripts: ['js/measurements/structure.js']
 	<div class="modal-content">
 	  <div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-		<h4 class="modal-title" id="myModalLabel">Page Differences</h4>
+		<h4 class="modal-title" id="myModalLabel">Page Structure</h4>
 	  </div>
 	  <div class="modal-body">
 		<p>Web pages are made up of multiple objects. This first object fetched is
@@ -111,5 +127,7 @@ scripts: ['js/measurements/structure.js']
 	</div>
   </div>
 </div>
+
+{% include cdf.html %}
 
 <!-- =============== END EXPLANATION MODALS =============== -->
