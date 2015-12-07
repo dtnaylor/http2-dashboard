@@ -737,6 +737,21 @@ def phase3(conf, out_file):
     with open(out_file, 'w') as f:
         json.dump(data, f)
 
+def alexa_db_size(conf, out_file):
+    data = defaultdict(dict)
+
+    counts, start_date, interval =\
+        read_time_series(conf['alexa_db_size'])
+
+    data['alexa_db_size']['counts'] = counts
+    data['alexa_db_size']['start_year'] = start_date.year
+    data['alexa_db_size']['start_month'] = start_date.month-1
+    data['alexa_db_size']['start_day'] = start_date.day
+    data['alexa_db_size']['interval'] = interval
+    
+    with open(out_file, 'w') as f:
+        json.dump(data, f)
+
 
 
     
@@ -802,6 +817,11 @@ def run(conf_path, outdir):
 
     if len(outliers) > 0:
         logging.warn(outlier_report(outliers))
+
+    # ALEXA DB
+    out_file = os.path.join(outdir, 'alexa_db_size.json')
+    alexa_db_size(conf, out_file)
+
 
 
 

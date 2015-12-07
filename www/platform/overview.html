@@ -1,6 +1,7 @@
 ---
 layout: platform
 title: Measurement Platform
+scripts: ['js/platform/overview.js']
 ---
 
 <h1 class="page-header">Measurment Platform</h1>
@@ -13,23 +14,47 @@ title: Measurement Platform
 </div> <!-- row -->
 
 
+<!-- PHASES -->
 <div class="row" style="margin-left: 10px; margin-bottom: 20px">
 	<div class="col-md-10 col-md-offset-1">
 		Our measurements run in three phases:
 		<ul>
-			<li><b>Phase I:</b> Workers on PlanetLab probe the top 1 million
-			Alexa sites, using NPN to determine which sites <i>announce</i>
-			HTTP/2 support. <i>(Runs daily.)</i></li>
+			<li><b>Phase I:</b> Workers on PlanetLab probe a list of sites
+			based on the top 1 million Alexa sites (<a href="#urllist">see
+			below</a>), using NPN and ALPN to determine which sites
+			<i>announce</i> HTTP/2 support.  <i>(Runs daily.)</i></li>
 
 			<li><b>Phase II:</b> Workers in our labs in Cleveland, USA and
 			Barcelona, Spain attempt to fetch the root object for each site
 			that claims to support HTTP/2. The result is a list of sites that
-			<i>actually</i> support HTTP/2. <i>(Runs daily.)</i></li>
+			<i>partially</i> and <i>truly</i> support HTTP/2. <i>(Runs
+			daily.)</i></li>
 
-			<li><b>Phase III:</b> One worker in Barcelona, Spain fetches each
-			site that actually supports HTTP/2 using HTTP/1.1, SPDY, and HTTP/2
-			and records performance and usage information like page load time
-			and number of TCP connections used. <i>(Runs weekly.)</i></li>
+			<li><b>Phase III:</b> Crawlers in Barcelona, Cleveland, and
+			Pittsburgh fetch each site that actually supports HTTP/2 using
+			HTTP/1.1 and HTTP/2 and records performance and usage information
+			like page load time and number of TCP connections used. <i>(Runs
+			weekly.)</i></li>
 		</ul>
+	</div> <!-- col -->
+</div> <!-- row -->
+
+
+<!-- URL LIST -->
+<div class="row" style="margin-left: 10px; margin-bottom: 20px">
+	<a name="urllist" class="anchor-wrapper">
+		<h2>What Sites do we Crawl?</h1>
+	</a>
+	<div class="col-md-10 col-md-offset-1">
+	
+		<p>We use the <a
+		href="http://s3.amazonaws.com/alexa-static/top-1m.csv.zip">Alexa Top 1
+		Million</a> list. From November 2014 to August 2015, we use a copy of
+		the Alexa list fetched on November 10th, 2014. Beginning in September
+		2015, we merge the current Alexa list with our own each day, constantly
+		expanding the pool of sites we query:</p> <br/>
+		
+		<div id="alexa-db-evolution-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
 	</div> <!-- col -->
 </div> <!-- row -->
