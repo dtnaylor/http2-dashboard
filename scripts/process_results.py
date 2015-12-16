@@ -406,6 +406,7 @@ def support_by_server(conf, out_file):
 
         if counts == None or start_date == None or interval == None: continue
         if counts[-1] < 100: continue  # TODO: smarter threshold
+        if series_name == 'unknown': continue
 
         last_counts.append((series_name, counts[-1]))
 
