@@ -141,6 +141,23 @@ scripts: ['js/jquery.dataTables.min.js', 'js/dataTables.bootstrap.min.js', 'js/c
 		  <!-- List group -->
 		  <ul class="list-group">
 			
+			<!-- Phase1 update -->
+			<li class="list-group-item"><i>2015-12-15</i> &nbsp;&nbsp; <b>We update measurement methodology</b>
+				<a style="float: right;" data-toggle="collapse" href="#MethodologyUpdate2" aria-expanded="false" aria-controls="MethodologyUpdate2">more...</a>
+				<div class="collapse" id="MethodologyUpdate2">
+				  <div class="panel-body">
+					We update our <a href="{{ site.baseurl }}/platform/overview.html">Phase 1</a> 
+					measurements to include the
+					<a href="https://en.wikipedia.org/wiki/Server_Name_Indication">Server
+					Name Indication (SNI)</a> TLS extension when we probe sites for
+					HTTP/2 support. Without the SNI set, some HTTP/2 sites
+					(e.g., those using virtual hosts) do not indicate HTTP/2
+					support in their ALPN responses. We found around 30,000 such
+					sites, of which 20,000 truly support HTTP/2.
+				  </div>
+				</div>
+			</li>
+			
 			<!-- Phase2 update -->
 			<li class="list-group-item"><i>2015-12-09</i> &nbsp;&nbsp; <b>We update measurement methodology</b>
 				<a style="float: right;" data-toggle="collapse" href="#MethodologyUpdate" aria-expanded="false" aria-controls="MethodologyUpdate">more...</a>
