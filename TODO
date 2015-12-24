@@ -1,7 +1,4 @@
-- Make X axes line up on time series plots
-- add explanations of big events
 - document phase3 data structures
 - historical phase3 plots?
-- explain the pool of sites we crawl
-- explain perf/usage plots better?
-- add plain h2 line to protocol breakdown plot
+- explain perf/usage plots better
+- show total sites crawled on overview page
