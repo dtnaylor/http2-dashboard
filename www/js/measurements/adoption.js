@@ -53,7 +53,7 @@ $.getJSON('{{ site.baseurl }}/data/support_by_date.json', function(data) {
 		data['aux_series_keys'],
 		proto_labels,
 		 null,
-		 true
+		 false // TODO: change back to true -- log Y scale bug
 		);
 
 });
