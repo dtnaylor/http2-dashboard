@@ -93,7 +93,7 @@ def check_time_series_data(data_file, counts):
             (counts[-2], counts[-1], data_file))
         
 
-def read_time_series(filepath, date_first=False):
+def read_time_series(filepath, date_first=False, ignore_dates=[]):
     global outliers
     try:
         with open(filepath, 'r') as f:
@@ -107,6 +107,8 @@ def read_time_series(filepath, date_first=False):
                     date, count = line.strip().split()
                 else:
                     count, date = line.strip().split()
+
+                if date in ignore_dates: continue
 
                 try:
                     count = int(count)
@@ -408,7 +410,8 @@ def support_by_server(conf, out_file):
 
     for series_path in series:
         counts, start_date, interval =\
-            read_time_series(series_path, date_first=True)
+            read_time_series(series_path, date_first=True,\
+                ignore_dates=conf['phase_2_ignore_dates'])
         series_name = os.path.split(series_path)[-1]
 
         if counts == None or start_date == None or interval == None: continue
