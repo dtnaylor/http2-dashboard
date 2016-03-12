@@ -84,6 +84,7 @@ def check_time_series_data(data_file, counts):
     global outliers
     if len(counts) < 2: return
     if counts[-2] == 0: return
+    if counts[-1] == None or counts[-2] == None: return
 
     diff = abs(counts[-1] - counts[-2])
     if diff / float(counts[-2]) > OUTLIER_THRESHOLD\
@@ -131,10 +132,14 @@ def read_time_series(filepath, date_first=False):
                     # ignore this point if 2nd point this day
                     if days_since_last_point == 0:
                         continue
-
-                    # repeat last data point if days are missing
+                    
+                    # insert null data point if days are missing
                     if days_since_last_point > 1:
-                        counts += [counts[-1]]*(days_since_last_point-1)
+                        counts += [None]*(days_since_last_point-1)
+
+                    ## repeat last data point if days are missing
+                    #if days_since_last_point > 1:
+                    #    counts += [counts[-1]]*(days_since_last_point-1)
 
                     # if dates are out of order, skip dates the should have
                     # come before the latest_date (TODO: something better?)
@@ -234,6 +239,8 @@ def make_npn_series(conf):
     # write a file with npn counts
     with open(conf['npn'], 'w') as f:
         for i in range(len(h1_counts)):
+            if h1_counts[i] == None or alpn_counts[i] == None:
+                continue
             npn_count = h1_counts[i] - alpn_counts[i]
             date = npn_start + datetime.timedelta(days=i)
             f.write('%i\t%s\n' % (npn_count, date.strftime('%Y-%m-%d')))
