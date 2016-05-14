@@ -128,3 +128,10 @@ body {
 .subtle:hover {
 	color: #888888;
 }
+
+
+.leftbar {
+	border-left: 1px solid #AAAAAA;
+	margin-left: 5px;
+	padding-left: 5px;
+}
