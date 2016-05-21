@@ -29,7 +29,7 @@ DATE_FORMATS = (
     '%a_%b_%-d_%Y', # dash for no leading 0 on day
 )
 OUTLIER_THRESHOLD = 0.25
-OUTLIER_THRESHOLD_ABS = 5
+OUTLIER_THRESHOLD_ABS = 10
 
 H2_OBJ_THRESHOLDS = (1.0, 0.9, 0.8, 0.5, 0)
 # limit which location's data we export for threshold breakdown
