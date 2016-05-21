@@ -370,7 +370,8 @@ def support_by_date(conf, out_file):
       'alpn',
       'h2c-announce',
       'h2c-support',
-      'alpn-no-npn'
+      'alpn-no-npn',
+      'npn-no-alpn',
     ]
     series = support_series + protocol_series + aux_series
     

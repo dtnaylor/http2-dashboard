@@ -16,6 +16,7 @@ proto_labels["h2_17_advertised_support_by_date"] = "H2 Draft 17";
 proto_labels["npn"] = "NPN";
 proto_labels["alpn"] = "ALPN";
 proto_labels["alpn-no-npn"] = "ALPN without NPN";
+proto_labels["npn-no-alpn"] = "NPN without ALPN";
 proto_labels["h2c-announce"] = "H2C (Announced)";
 proto_labels["h2c-support"] = "H2C (True)";
 
