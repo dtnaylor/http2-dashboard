@@ -12,6 +12,10 @@ body {
   font-size: 16px;
 }
 
+.semibold {
+	font-weight: 400;
+}
+
 /* Move anchors down so when you jump, header isn't hidden under navbar */
 .anchor {
 	padding-top: 50px; margin-top: -50px;
